@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Créer un compte</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_errors(registrationForm) }}
+
+                    {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.username, 'Nom d’utilisateur', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                            {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control', 'placeholder': 'Choisissez un nom d’utilisateur'}}) }}
+                            {{ form_help(registrationForm.username) }}
+                            {{ form_errors(registrationForm.username) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe sécurisé'}}) }}
+                            {{ form_help(registrationForm.plainPassword) }}
+                            {{ form_errors(registrationForm.plainPassword) }}
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(registrationForm.agreeTerms, 'J’accepte les conditions d’utilisation', {'label_attr': {'class': 'form-check-label'}}) }}
+                            {{ form_errors(registrationForm.agreeTerms) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">S’inscrire</button>
+                    {{ form_end(registrationForm) }}
+                </div>
+                <div class="card-footer text-center">
+                    <small>Déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <style>
+        body {
+            background-image: url('{{ asset('images/paraback.png') }}') !important;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: transparent;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+ </style>
+{% endblock %}

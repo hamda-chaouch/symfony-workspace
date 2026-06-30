@@ -1,0 +1,119 @@
+{% macro render_vente_item(itemForm) %}
+    <li class="row-item">
+        {{ form_row(itemForm.produit) }}
+        {{ form_row(itemForm.quantite) }}
+        {{ form_row(itemForm.prix_unitaire_ht) }}
+        <button type="button" class="remove-item btn btn-danger btn-sm">Supprimer cet Article de cette Vente</button>
+    </li>
+{% endmacro %}
+
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_row(form.reference) }}
+    {{ form_row(form.date_vente) }}
+    {{ form_row(form.client) }}
+    {{ form_row(form.tva_pourcentage) }}
+    {{ form_row(form.etat) }}
+
+    <h4 class="text-white">Ajouter Articles à votre Vente</h4>
+    <ul id="vente-items-list" class="list-unstyled" data-prototype="{{ _self.render_vente_item(form.venteItems.vars.prototype)|e('html_attr') }}">
+        {% for item in form.venteItems %}
+            {{ _self.render_vente_item(item) }}
+        {% endfor %}
+    </ul>
+    <button type="button" id="add-item" class="btn btn-primary">Ajouter un autre Article pour cette Vente</button>
+
+    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}
+
+<script>
+
+    // Functions for product auto-fill and supplier filtering (same as before)
+    function attachProductListener(container) {
+        let productSelect = container.querySelector('select[id$="_produit"]');
+        if (productSelect) {
+            productSelect.addEventListener('change', function() {
+                let selectedOption = this.options[this.selectedIndex];
+                let price = selectedOption.getAttribute('data-price') || 0;
+                let priceInput = container.querySelector('input[id$="_prix_unitaire_ht"]');
+                if (priceInput) priceInput.value = price;
+            });
+        }
+    }
+
+    function updateProductOptions(row, supplierId) {
+        let productSelect = row.querySelector('select[name$="[produit]"]');
+        if (!productSelect) return;
+        let currentValue = productSelect.value;
+        fetch('/pharmacy/achat/get-products/' + supplierId)
+            .then(response => response.json())
+            .then(products => {
+                productSelect.innerHTML = '<option value="">Choisit un Article</op>
+                products.forEach(product => {
+                    let option = new Option(product.designation, product.id);
+                    option.setAttribute('data-price', product.prix_unitaire_ht);
+                    productSelect.appendChild(option);
+                });
+                if (currentValue) productSelect.value = currentValue;
+            });
+    }
+
+
+    // Supplier dropdown
+    let supplierSelect = document.querySelector('select[name$="[fournisseur]"]');
+    if (supplierSelect) {
+        supplierSelect.addEventListener('change', function() {
+            let supplierId = this.value;
+            if (!supplierId) return;
+            window.selectedSupplier = supplierId;
+            document.querySelectorAll('#vente-items-list li').forEach(row => {
+                updateProductOptions(row, supplierId);
+            });
+        });
+        if (supplierSelect.value) supplierSelect.dispatchEvent(new Event('change')>
+    }
+
+
+    // Attach listeners to existing rows
+    document.querySelectorAll('#vente-items-list li').forEach(attachProductListene>
+
+
+    // Get the prototype HTML
+    const prototype = document.getElementById('vente-items-list').dataset.prototype;
+    const list = document.getElementById('vente-items-list');
+    const addButton = document.getElementById('add-item');
+
+    //document.addEventListener('DOMContentLoaded', function() {
+        //const addButton = document.getElementById('add-item');
+    document.body.addEventListener('click', function(e) {
+      if (e.target && e.target.id === 'add-item') {
+        // Add new row
+        if (addButton) {
+            addButton.addEventListener('click', function() {
+                const index = list.children.length;
+                let newHtml = prototype.replace(/__name__/g, index);
+                const li = document.createElement('li');
+                li.innerHTML = newHtml;
+                list.appendChild(li);
+                // Re-attach product listener and supplier filter
+                attachProductListener(li);
+                if (window.selectedSupplier) {
+                    updateProductOptions(li, window.selectedSupplier);
+                }
+            });
+        }
+    });
+
+    // Remove row (event delegation)
+    if (list) {
+        list.addEventListener('click', function(e) {
+            const removeBtn = e.target.closest('.remove-item');
+            if (removeBtn) {
+                const li = removeBtn.closest('li');
+                if (li) li.remove();
+            }
+        });
+    }
+
+
+</script>

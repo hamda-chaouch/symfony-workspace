@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New AchatItem{% endblock %}
+
+{% block body %}
+    <h1>Creer Nouveau AchatItem</h1>
+
+    {{ include('pharmacy/achat_item/_form.html.twig') }}
+
+    <a href="{{ path('app_pharmacy_achat_item_index') }}">back to list</a>
+{% endblock %}

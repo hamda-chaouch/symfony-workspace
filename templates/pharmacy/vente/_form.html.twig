@@ -1,0 +1,224 @@
+{% macro render_vente_item(itemForm) %}
+    <li class="row-item">
+        {{ form_row(itemForm.produit) }}
+        {{ form_row(itemForm.quantite) }}
+        {{ form_row(itemForm.prix_unitaire_ht) }}
+        {{ form_row(itemForm.tva_pourcentage) }}
+        <button type="button" class="remove-item btn btn-danger btn-sm">Supprimer cet Article de cette Vente</button>
+    </li>
+{% endmacro %}
+
+{{ form_start(form) }}
+    <style>
+        .form-group-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .form-group-card legend {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c3e50;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            width: auto;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #1e466e;
+            margin-bottom: 0.25rem;
+        }
+       /* Dim help text */
+       .form-text {
+            font-size: 0.7rem;
+            color: #aaa !important;
+            opacity: 0.6;
+            margin-top: 0.2rem;
+            font-style: italic;
+        }
+    </style>
+    {#{ form_errors(form) }#}
+    {# Display global form errors as Bootstrap alerts #}
+    {% for error in form.vars.errors %}
+        <div class="alert alert-danger">{{ error.message }}</div>
+    {% endfor %}
+
+    <fieldset class="mb-4 p-3 border rounded form-group-card">
+        <legend class="fs-5 fw-bold text-primary">📄Ventet</legend>
+            {{ form_row(form.reference) }}  
+            {{ form_row(form.date_vente) }}
+            {# <p class="form-control-static">{{ vente.dateVente|date('d/m/Y H:i') }}</p> #}
+            {#{ form_row(form.client) }#}
+            {#{ form_row(form.tva_pourcentage) }#}
+            {#{ form_row(form.etat) }#}
+            {% if form.etat is defined %}
+                {{ form_row(form.etat) }}
+            {% endif %}
+
+    <fieldset class="mb-4 p-3 border rounded form-group-card">
+        <legend class="fs-5 fw-bold text-success">🛒 Produits Vendus</legend>
+       {#  <h4 class="text-white">Ajouter Articles à votre Vente</h4> #}
+
+        <ul id="vente-items-list" class="list-unstyled" data-prototype="{{ _self.render_vente_item(form.venteItems.vars.prototype)|e('html_attr') }}">
+            {% for item in form.venteItems %}
+                {{ _self.render_vente_item(item) }}
+            {% endfor %}
+        </ul>
+        <button type="button" id="add-item" class="btn btn-primary">➕ Ajouter un autre Article pour cette Vente</button>
+    </fieldset>
+
+    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}
+
+
+<script>
+
+    (function() {
+        // Debug flag
+        console.log('Script loaded');
+
+        function initForm() {
+            const list = document.getElementById('vente-items-list');
+            if (!list){
+                console.error('List #vente-items-list not found');
+                return;
+            }
+
+            const addButton = document.getElementById('add-item');
+            if (!addButton) {
+                console.error('Add button #add-item not found');
+                return;
+            }
+
+
+            // Remove any previous listener to avoid duplicates
+            addButton.removeEventListener('click', addButton.clickHandler);
+            // Define the handler
+            addButton.clickHandler = addNewRow;
+            addButton.addEventListener('click', addButton.clickHandler);
+            console.log('Add button listener attached');
+            
+            function addNewRow() {
+                //e.preventDefault();
+                console.log('Add button clicked');
+                if (list.children.length === 0) {
+                    console.warn('No rows to clone');
+                    return;
+                }
+                const firstRow = list.children[0];
+                const newRow = firstRow.cloneNode(true);
+                // Clear values
+                newRow.querySelectorAll('input, select').forEach(field => {
+                    if (field.type !== 'checkbox' && field.type !== 'radio') {
+                        field.value = '';
+                    } else {
+                        field.checked = false;
+                    }
+                });
+                // Remove listener attributes so they can be reattached
+                newRow.querySelectorAll('[data-product-listener], [data-remove-listener]').forEach(el => {
+                    el.removeAttribute('data-product-listener');
+                    el.removeAttribute('data-remove-listener');
+                });
+                list.appendChild(newRow);
+                reindexRows(); // <-- important: renumber all rows
+
+                // Re‑attach remove listener
+                attachProductListener(newRow);
+                attachRemoveListener(newRow);
+
+                // Re‑apply supplier filter if needed
+                /* const supplierSelect = document.querySelector('select[name$="[fournisseur]"]');
+                if (supplierSelect && supplierSelect.value) {
+                    updateProductOptions(newRow, supplierSelect.value);
+                } */
+            }
+
+
+            // Helper functions (same as before)
+            function attachProductListener(row) {
+                const productSelect = row.querySelector('select[id$="_produit"]');
+                if (productSelect && !productSelect.hasAttribute('data-product-listener')) {
+                    productSelect.setAttribute('data-product-listener', 'true');
+                    productSelect.addEventListener('change', function() {
+                        const selectedOption = this.options[this.selectedIndex];
+                        const price = selectedOption.getAttribute('data-price') || 0;
+                        const priceInput = row.querySelector('input[id$="_prix_unitaire_ht"]');
+                        if (priceInput) priceInput.value = price;
+                        const tva = selectedOption.getAttribute('data-tva') || 0;
+                        const tvaInput = row.querySelector('input[id$="_tva_pourcentage"]');
+                        if (tvaInput) tvaInput.value = tva;
+                    });
+                }
+            }
+
+            function attachRemoveListener(row) {
+                const removeBtn = row.querySelector('.remove-item');
+                if (removeBtn && !removeBtn.hasAttribute('data-remove-listener')) {
+                    removeBtn.setAttribute('data-remove-listener', 'true');
+                    removeBtn.addEventListener('click', () => {
+                        if (list.children.length > 1) {
+                            row.remove();
+
+                        } else {
+                            row.querySelectorAll('input, select').forEach(field => {
+                                if (field.type !== 'checkbox' && field.type !== 'radio') {
+                                    field.value = '';
+                                } else {
+                                    field.checked = false;
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+
+            function reindexRows() {
+                for (let i = 0; i < list.children.length; i++) {
+                    const row = list.children[i];
+                    // Update name attributes of all input/select fields
+                    row.querySelectorAll('input, select').forEach(field => {
+                        if (field.name) {
+                            field.name = field.name.replace(/\[[0-9]+\]/, `[${i}]`);
+                        }
+                    });
+                    // Also update ids if you rely on them (optional)
+                    row.querySelectorAll('[id]').forEach(field => {
+                        if (field.id) {
+                            field.id = field.id.replace(/_[0-9]+_/, `_${i}_`);
+                        }
+                    });
+                }
+            }
+
+
+            // Attach listeners to existing rows
+            for (let row of list.children) {
+                attachProductListener(row);
+                attachRemoveListener(row);
+            }
+
+        }
+
+        // Handle Turbo and normal page loads
+        if (typeof Turbo !== 'undefined') {
+            document.addEventListener('turbo:load', () => {
+                console.log('turbo:load fired');
+                initForm();
+            });
+        } else {
+            document.addEventListener('DOMContentLoaded', initForm);
+        }
+        // Also run immediately if DOM already loaded
+        if (document.readyState !== 'loading') {
+            initForm();
+        }
+    })();
+
+</script>

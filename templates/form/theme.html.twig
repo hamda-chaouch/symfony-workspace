@@ -1,0 +1,14 @@
+{# templates/form/theme.html.twig #}
+{% extends 'bootstrap_5_layout.html.twig' %}
+
+{# Make labels bold #}
+{% block form_label %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' fw-semibold')|trim}) %}
+    {{ parent() }}
+{% endblock %}
+
+{# Make help text subtle #}
+{% block form_help %}
+    {% set help_attr = help_attr|merge({'class': (help_attr.class|default('') ~ ' form-text text-muted small fst-italic')|trim}) %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Voir les Détails d'une Vente{% endblock %}
+
+{% block content %}
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+
+        <h1>Détails de la Vente #{{ vente.id }}</h1>
+        <a href="{{ path('app_pharmacy_vente_new') }}" class="btn btn-primary">Créer nouveau</a>
+
+    </div>
+
+    <a href="{{ path('app_pharmacy_vente_index') }}" class="btn btn-secondary">← Retour à la Liste</a>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Référence</dt>
+                <dd class="col-sm-9">{{ vente.reference }}</dd>
+
+                <dt class="col-sm-3">Date</dt>
+                <dd class="col-sm-9">{{ vente.dateVente|date('d/m/Y H:i') }}</dd>
+{#
+                <dt class="col-sm-3">Client</dt>
+                <dd class="col-sm-9">{{ vente.client.raisonSocial }}</dd> #}
+{#
+                <dt class="col-sm-3">TVA (%)</dt>
+                <dd class="col-sm-9">{{ vente.tvaPourcentage ?? 0 }} %</dd> #}
+
+                <dt class="col-sm-3">Statut</dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-{{ vente.etat == 'delivered' ? 'success' : (vente.etat == 'cancelled' ? 'danger' : 'secondary') }}">
+                        {{ vente.etat }}
+                    </span>
+                </dd>
+
+                <dt class="col-sm-3">Total HT</dt>
+                <dd class="col-sm-9">{{ vente.totalHt|number_format(2, ',', ' ') }} Dt</dd>
+
+                <dt class="col-sm-3">Total TVA</dt>
+                <dd class="col-sm-9">{{ vente.totalTva|number_format(2, ',', ' ') }} Dt</dd>
+
+                <dt class="col-sm-3">Total TTC</dt>
+                <dd class="col-sm-9">{{ vente.totalTtc|number_format(2, ',', ' ') }} Dt</dd>
+
+                <dt class="col-sm-3">Actions</th>
+                <dd class="col-sm-9">
+    {#<a href="{{ path('app_pharmacy_vente_edit', {'id': vente.id}) }}" class="btn btn-sm btn-warning">Modifier</a>#}
+    {% if vente.etat != 'cancelled' %}
+        <form method="post" action="{{ path('app_pharmacy_vente_cancel', {'id': vente.id}) }}" onsubmit="return confirm('Etes-vous sur vouloir Annuler cette Vente? Ceci changera le Stock.');" style="display: inline-block;">
+            <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ vente.id) }}">
+            <button class="btn btn-warning">Annuler Vente</button>
+        </form>
+    {% endif %}
+
+    {# { include('pharmacy/vente/_delete_form.html.twig') } #}
+    {# if is_granted('ROLE_ADMIN') and vente.etat == 'draft' #}
+    {% if vente.etat == 'draft' %}
+        <form method="post" action="{{ path('app_pharmacy_vente_delete', {'id': vente.id}) }}" onsubmit="return confirm('Etes-vous sur? Cette action ne peut pas etre retiree.');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vente.id) }}">
+            <button class="btn btn-danger">Delete</button>
+        </form>
+    {% endif %}
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <h4 class="text-white">Articles vendus</h4>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire HT</th>
+                    <th>% TVA</th>
+                    <th>Total ligne HT</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in vente.venteItems %}
+                    <tr>
+                        <td>{{ item.produit.designation }}</td>
+                        <td>{{ item.quantite }}</td>
+                        <td>{{ item.prixUnitaireHt|number_format(2, ',', ' ') }} Dt</td>
+                        <td>{{ item.tvaPourcentage }}</td>
+                        <td>{{ item.totalLigneHt|number_format(2, ',', ' ') }} Dt</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4" class="text-center">Aucun article dans cette vente.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <a href="{{ path('app_pharmacy_vente_index') }}" class="btn btn-secondary">← Retour à la Liste</a>
+
+{% endblock %}

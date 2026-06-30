@@ -1,0 +1,24 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Mon profil{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Informations personnelles</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Nom d'utilisateur</dt>
+            <dd class="col-sm-9">{{ user.username }}</dd>
+
+            <dt class="col-sm-3">Nom complet</dt>
+            <dd class="col-sm-9">{{ user.name ?? '—' }}</dd>
+
+            <dt class="col-sm-3">Rôles</dt>
+            <dd class="col-sm-9">{{ user.roles|join(', ') }}</dd>
+        </dl>
+        <a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour</a>
+    </div>
+</div>
+{% endblock %}

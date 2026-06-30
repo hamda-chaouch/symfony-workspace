@@ -1,0 +1,18 @@
+projects:
+  - name: "🤖💹 Trading Bot Dashboard"
+    path: "/binance"
+    icon: "fab fa-bitcoin"
+    description: "Automated crypto trading with Telegram alerts."
+  - name: "🏥 Parapharmacy Manager"
+    path: "/pharmacy"
+    icon: "fas fa-store"
+    description: "Inventory, sales, suppliers, and purchase orders."
+  - name: "🛒 I Buy E‑commerce"
+    path: "/ibuy"
+    icon: "fas fa-shopping-cart"
+    description: "Online marketplace with cart and payments."
+  - name: "🗄️  My DataBases"
+    path: "/db"
+    icon: "fas fa-mobile-alt"
+    description: "Manage my MariaDB DataBases."
+    external: true

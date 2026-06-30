@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription réussie{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                    <h1>Inscription réussie !</h1>
+                    <p>Votre compte a été créé avec succès.</p>
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('pharmacy_dashboard') }}" class="btn btn-primary">Accéder au tableau de bord</a>
+                        <a href="{{ path('home_index') }}" class="btn btn-outline-secondary">Retour à l'accueil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <style>
+        body {
+            background-image: url('{{ asset('images/paraback.png') }}') !important;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: transparent;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+ </style>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Achat{% endblock %}
+
+{% block body %}
+    <h1>Achat</h1>
+
+    <table class="table">
+
+        <tbody>
+            {# <tr> #}
+                {# <th>Id</th> #}
+                {# <td>{{ achat.id }}</td> #}
+            {# </tr>
+            <tr>
+                <th>Reference</th>
+                <td>{{ achat.reference }}</td>
+            </tr>
+            <tr>
+                <th>Date_achat</th>
+                <td>{{ achat.dateAchat ? achat.dateAchat|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Total_ht</th>
+                <td>{{ achat.totalHt }}</td>
+            </tr>
+            <tr>
+                <th>Total_tva</th>
+                <td>{{ achat.totalTva }}</td>
+            </tr>
+            <tr>
+                <th>Total_ttc</th>
+                <td>{{ achat.totalTtc }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>{{ achat.etat }}</td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <h3>Purchase Items</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price (HT)</th>
+                <th>Line Total (HT)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in achat.achatItems %}
+                <tr>
+                    <td>{{ item.produit.designation }}</td>
+                    <td>{{ item.quantite }}</td>
+                    <td>{{ item.prixUnitaireHt }}</td>
+                    <td>{{ item.totalLigneHt }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="4">No items</td></tr>
+            {% endfor %}
+        </tbody> 
+    </table>
+
+    <a href="{{ path('app_pharmacy_achat_index') }}">back to list</a>
+
+    <a href="{{ path('app_pharmacy_achat_edit', {'id': achat.id}) }}">edit</a>
+
+    {{ include('pharmacy/achat/_delete_form.html.twig') }}
+{% endblock %}

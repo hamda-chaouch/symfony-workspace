@@ -1,0 +1,17 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Modifier la Catégorie{% endblock %}
+
+{% block content %}
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+
+        <h1>Modifier</h1>
+    </div>
+
+    <a href="{{ path('app_pharmacy_category_index') }}" class="btn btn-secondary">← Retour à la Liste</a>
+
+    {{ include('pharmacy/category/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('pharmacy/category/_delete_form.html.twig') }}
+    <a href="{{ path('app_pharmacy_category_index') }}" class="btn btn-secondary">Retour à la Liste</a>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{# <div class="achat-item"> #}
+    {# { form_row(form.produit)  } #}
+    {# { form_row(form.quantity) } #}
+    {# { form_row(form.unit_price_ht) } #}
+    {# { form_row(form.tva_rate) } #}
+    {# The total_ligne_ht is calculated automatically, so not displayed #}
+{# </div> #}
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

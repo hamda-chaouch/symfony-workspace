@@ -1,0 +1,12 @@
+{{ form_start(form) }}
+    <fieldset class="mb-4 p-3 border rounded">
+        <legend class="fs-5 fw-bold text-primary">👤 Client</legend>
+        {{ form_row(form.raisonSocial) }}
+        {{ form_row(form.adresse) }}
+        {{ form_row(form.responsable) }}
+        {{ form_row(form.gsm) }}
+        {{ form_row(form.telephone) }}
+        {{ form_row(form.email) }}
+    </fieldset>
+    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

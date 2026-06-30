@@ -1,0 +1,73 @@
+y{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Voir les Détails de cette Vente{% endblock %}
+
+{% block content %}
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+
+        <h1>Détails</h1>
+        <a href="{{ path('app_pharmacy_vente_new') }}" class="btn btn-primary">Créer nouveau</a>
+
+    </div>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vente.id }}</td>
+            </tr>
+            <tr>
+                <th>Reference</th>
+                <td>{{ vente.reference }}</td>
+            </tr>
+            <tr>
+                <th>Date_vente</th>
+                <td>{{ vente.dateVente ? vente.dateVente|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Total_ht</th>
+                <td>{{ vente.totalHt }}</td>
+            </tr>
+            <tr>
+                <th>Total_tva</th>
+                <td>{{ vente.totalTva }}</td>
+            </tr>
+            <tr>
+                <th>Total_ttc</th>
+                <td>{{ vente.totalTtc }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>{{ vente.etat }}</td>
+            </tr>
+            <tr>
+                <th>Tva_pourcentage</th>
+                <td>{{ vente.tvaPourcentage }}</td>
+            </tr>
+            <tr>
+                <th>Actions</th>
+                <td>
+    <a href="{{ path('app_pharmacy_vente_edit', {'id': vente.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+    {% if vente.etat != 'cancelled' %}
+        <form method="post" action="{{ path('app_pharmacy_achat_cancel', {'id': achat.id}) }}" onsubmit="return confirm('Etes-vous sur vouloir Annuler cette Vente? Ceci changera le Stock.');" style="display: inline-block;">
+            <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ vente.id) }}">
+            <button class="btn btn-warning">Cancel Purchase</button>
+        </form>
+    {% endif %}
+
+    {# { include('pharmacy/vente/_delete_form.html.twig') } #}
+    {# if is_granted('ROLE_ADMIN') and vente.etat == 'draft' #}
+    {% if vente.etat == 'draft' %}
+        <form method="post" action="{{ path('app_pharmacy_vente_delete', {'id': vente.id}) }}" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vente.id) }}">
+            <button class="btn btn-danger">Delete</button>
+        </form>
+    {% endif %}
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pharmacy_vente_index') }}" class="btn btn-secondary">← Retour à la Liste</a>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Voir les Détails de la Categorie {{ category.nom }}{% endblock %}
+
+{% block content %}
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+
+        <h1>Détails</h1>
+        <a href="{{ path('app_pharmacy_category_new') }}" class="btn btn-primary">Créer nouveau</a>
+    </div>
+
+    <a href="{{ path('app_pharmacy_category_index') }}" class="btn btn-secondary">← Retour à la Liste</a>
+
+    <table class="table table-striped">
+        <tbody>
+{#            <tr>
+                <th>Id</th>
+                <td>{{ category.id }}</td>
+            </tr> #}
+            <tr>
+                <th>Nom</th>
+                <td>{{ category.nom }}</td>
+            </tr>
+            <tr>
+                <th>Actions</th>
+                <td>
+                    <a href="{{ path('app_pharmacy_category_edit', {'id': category.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                    {{ include('pharmacy/category/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Produits existants dans cette Catégorie</h3>
+    <ul> 
+        {% for product in category.stocks %}
+            <li>
+                <a href="{{ path('app_pharmacy_stock_show', {'id': product.id}) }}" class="bg-primary text-white">                   
+                    {{ product.designation }}
+                </a>
+            </li>
+        {% else %}
+            <li>Pas de Produits trouvés pour cette Catégorie</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_pharmacy_category_index') }}" class="btn btn-secondary">Retourner à la Liste</a>
+
+{% endblock %}

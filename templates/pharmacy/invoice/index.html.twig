@@ -1,0 +1,35 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Consulter les Factures!{% endblock %}
+
+{% block content %}
+
+<h1 class="text-white">Factures</h1>
+
+<li><a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour à l'Accueil</a></li>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>N° facture</th>
+            <th>Date</th>
+            <th>Total TTC</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inv in invoices %}
+        <tr>
+            <td>{{ inv.invoiceNumber }}</td>
+            <td>{{ inv.date|date('d/m/Y') }}</td>
+            <td>{{ inv.totalTtc|number_format(2, ',', ' ') }} €</td>
+            <td>{{ inv.status }}</td>
+            <td><a href="{{ path('app_invoice_show', {'id': inv.id}) }}" class="btn btn-sm btn-info">Voir</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<li><a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour à l'Accueil</a></li>
+
+{% endblock %}

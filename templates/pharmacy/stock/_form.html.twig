@@ -1,0 +1,134 @@
+
+{{ form_start(form) }}
+    {#{ form_widget(form) }#}
+
+    <style>
+        .form-group-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .form-group-card legend {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c3e50;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            width: auto;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #1e466e;
+            margin-bottom: 0.25rem;
+        }
+       /* Dim help text */
+       .form-text {
+            font-size: 0.7rem;
+            color: #aaa !important;
+            opacity: 0.6;
+            margin-top: 0.2rem;
+            font-style: italic;
+        }
+    </style>
+
+    {# Section 1: Identification #}
+    <div class="form-group-card">
+        <legend><i class="fas fa-tag me-2"></i> Identification</legend>
+{#{ form_row(form.designation, {
+    'label_attr': {'class': 'form-label fw-semibold'},
+    'help_attr': {'class': 'form-text text-muted small fst-italic'}
+}) }#}
+        {{ form_row(form.designation) }}
+        {{ form_row(form.reference) }}
+        {{ form_row(form.date_expiration) }}
+    </div>
+
+    {# Section 2: Prix & TVA #}
+    <div class="form-group-card">
+        <legend><i class="fas fa-euro-sign me-2"></i> Prix & TVA</legend>
+        <div class="row">
+            <div class="col-md-6">{{ form_row(form.prix_achat) }}</div>
+            <div class="col-md-6">{{ form_row(form.prix_gros) }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">{{ form_row(form.marge) }}</div>
+            <div class="col-md-6">{{ form_row(form.prix_detail) }}</div>
+        </div>
+        <div class="row">
+           <div class="col-md-6">{{ form_row(form.tva_pourcentage, {'label_attr': {'class': 'form-label'}}) }}</div>
+           <div class="col-md-6">{{ form_row(form.prix_ttc) }}</div>
+        </div>
+    </div>
+
+    {# Section 3: Gestion du Stock #}
+    <div class="form-group-card">
+        <legend><i class="fas fa-boxes me-2"></i> Gestion du stock</legend>
+        <div class="row">
+            <div class="col-md-4">{{ form_row(form.quantite) }}</div>
+            <div class="col-md-4">{{ form_row(form.quantite_min) }}</div>
+            <div class="col-md-4">{{ form_row(form.quantite_max) }}</div>
+        </div>
+        {{ form_row(form.description) }}
+    </div>
+
+    {# Section 4: Relations #}
+    <div class="form-group-card">
+        <legend><i class="fas fa-link me-2"></i> Liens</legend>
+        {{ form_row(form.fournisseur) }}
+        {{ form_row(form.categorie) }}
+    </div>
+
+    <button class="btn btn-success mt-2">{{ button_label|default('Enregistrer') }}</button>
+
+{{ form_end(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the fields using the exact name (fallback to ID)
+        const prixHt = document.querySelector('[name="{{ form.prix_achat.vars.full_name }}"]') ||
+                       document.getElementById('{{ form.prix_achat.vars.id }}');
+        const tva = document.querySelector('[name="{{ form.tva_pourcentage.vars.full_name }}"]') ||
+                    document.getElementById('{{ form.tva_pourcentage.vars.id }}');
+        const prixTtc = document.querySelector('[name="{{ form.prix_ttc.vars.full_name }}"]') ||
+                        document.getElementById('{{ form.prix_ttc.vars.id }}');
+        const marge = document.querySelector('[name="{{ form.marge.vars.full_name }}"]') ||
+                        document.getElementById('{{ form.marge.vars.id }}');
+        const prixDetail = document.querySelector('[name="{{ form.prix_detail.vars.full_name }}"]') ||
+                        document.getElementById('{{ form.prix_detail.vars.id }}');
+
+        // If elements not found, abort
+        if (!prixHt || !tva || !prixTtc || !marge || !prixDetail) {
+            console.warn('TTC calculation elements not found');
+            return;
+        }
+
+        // Normalize decimal input (supports both comma and dot)
+        function normalizeDecimal(value) {
+            if (typeof value !== 'string') value = String(value);
+            return parseFloat(value.replace(',', '.')) || 0;
+        }
+
+        function updateTtc() {
+            let ht = normalizeDecimal(prixHt.value);
+            let rate = normalizeDecimal(tva.value);
+            let margeV = normalizeDecimal(marge.value);
+            prixDetail.value = ht + margeV;
+            let prixDetailV = normalizeDecimal(prixDetail.value);
+            let ttc = prixDetailV * (1 + rate / 100);
+            prixTtc.value = ttc.toFixed(2);
+        }
+
+        // Attach event listeners
+        prixHt.addEventListener('input', updateTtc);
+        marge.addEventListener('input', updateTtc);
+        tva.addEventListener('input', updateTtc);
+        
+        // Run once to set initial value (for existing products)
+        updateTtc();
+    });
+</script>

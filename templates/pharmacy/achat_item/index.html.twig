@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AchatItem index{% endblock %}
+
+{% block body %}
+    <h1>AchatItem index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantite</th>
+                <th>Prix_unitaire_ht</th>
+                <th>Tva_pourcentage</th>
+                <th>Total_ligne_ht</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for achat_item in achat_items %}
+            <tr>
+                <td>{{ achat_item.id }}</td>
+                <td>{{ achat_item.quantite }}</td>
+                <td>{{ achat_item.prixUnitaireHt }}</td>
+                <td>{{ achat_item.tvaPourcentage }}</td>
+                <td>{{ achat_item.totalLigneHt }}</td>
+                <td>
+                    <a href="{{ path('app_pharmacy_achat_item_show', {'id': achat_item.id}) }}">show</a>
+                    <a href="{{ path('app_pharmacy_achat_item_edit', {'id': achat_item.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pharmacy_achat_item_new') }}">Create new</a>
+{% endblock %}

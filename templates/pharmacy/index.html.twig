@@ -1,0 +1,194 @@
+
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Parapharmacy Manager - Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Cash Summary Cards (same style as stock status card) -->
+<div class="card mb-4 shadow-sm border-success">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-cash-register text-success me-2"></i> Caisse</h5>
+        <div class="row mt-3">
+            <div class="col-md-3 text-center mb-3 mb-md-0">
+                <i class="fas fa-calendar-day fa-2x text-primary"></i>
+                <h6 class="mt-2 fw-bold">Journalière</h6>
+                {# <small class="text-muted">Ventes du jour</small> #}
+                <div class="mt-1">
+                    <span class="badge bg-primary fs-6">{{ dailyTotal|number_format(2, ',', ' ') }} Dt</span>
+                </div>
+                <small class="text-muted">Aujourd'hui</small>
+            </div>
+            <div class="col-md-3 text-center mb-3 mb-md-0">
+                <i class="fas fa-calendar-week fa-2x text-success"></i>
+                <h6 class="mt-2 fw-bold">Mensuelle</h6>
+                {# <small class="text-muted">Ventes du mois</small> #}
+                <div class="mt-1">
+                    <span class="badge bg-success fs-6">{{ monthlyTotal|number_format(2, ',', ' ') }} Dt</span>
+                </div>
+                <small class="text-muted">Ce mois</small>
+            </div>
+            <div class="col-md-3 text-center mb-3 mb-md-0">
+                <i class="fas fa-calendar-alt fa-2x text-warning"></i>
+                <h6 class="mt-2 fw-bold">Annuelle</h6>
+                {# <small class="text-muted">Ventes de l'année</small> #}
+                <div class="mt-1">
+                    <span class="badge bg-warning fs-6">{{ yearlyTotal|number_format(2, ',', ' ') }} Dt</span>
+                </div>
+                <small class="text-muted">Cette année</small>
+            </div>
+
+            <div class="col-md-3 text-center">
+              <div class="border-start-md ps-md-3">
+                <i class="fas fa-chart-line fa-2x text-danger"></i>
+                <h6 class="mt-2 fw-bold">Gain Journalier</h6>
+                <div class="mt-1">
+                    <span class="badge bg-danger fs-6">{{ dailyProfit|number_format(2, ',', ' ') }} Dt</span>
+                </div>
+                <small class="text-muted">(Ventes - Achats)</small>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stock status card -->
+            <div class="card mb-4 shadow-sm border-success">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-check-circle text-success"></i> Votre stock en bon état</h5>
+                    <p class="card-text">Aucune rupture de stock. Pensez à vérifier les produits proches de péremption.</p>
+                </div>
+</div>
+
+{# Alerte péremption #}
+<div class="card mb-4 shadow-sm border-danger">
+    <div class="card-header bg-danger text-white fw-bold">
+        <i class="fas fa-exclamation-triangle me-2"></i> Alertes péremption
+    </div>
+    <div class="card-body">
+        {% if expiredProducts|length > 0 %}
+            <h6 class="text-danger">⚠️ Produits EXPIRÉS</h6>
+            <ul>
+                {% for product in expiredProducts %}
+                    <li>
+                        <strong>{{ product.designation }}</strong> – Expiré le {{ product.dateExpiration|date('d/m/Y') }}
+                        <a href="{{ path('app_pharmacy_stock_edit', {'id': product.id}) }}" class="btn btn-sm btn-warning ms-2">Mettre à jour</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if soonExpiringProducts|length > 0 %}
+            <h6 class="text-warning mt-3">⚠️ Produits proches de l'expiration (dans les 30 jours)</h6>
+            <ul>
+                {% for product in soonExpiringProducts %}
+                    <li>
+                        <strong>{{ product.designation }}</strong> – Expire le {{ product.dateExpiration|date('d/m/Y') }}
+                        <a href="{{ path('app_pharmacy_stock_edit', {'id': product.id}) }}" class="btn btn-sm btn-info ms-2">Voir</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if expiredProducts|length == 0 and soonExpiringProducts|length == 0 %}
+            <p class="text-success mb-0">Aucune alerte de péremption.</p>
+        {% endif %}
+    </div>
+</div>
+
+
+
+            <!-- Entity management cards (moved from sidebar) -->
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🚚 </span>
+                            <h5 class="card-title">Fournisseurs</h5>
+                            <p class="card-text">Gérer les fournisseurs et leurs informations.</p>
+                            <a href="{{ path('app_pharmacy_fournisseur_index') }}" class="btn btn-outline-primary">Accéder</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card text-center h-100 shadow-sm bg-light text-muted" style="opacity: 0.7; filter: grayscale(0.2); pointer-events: none;">
+                        <div class="card-body">
+                            {#<i class="fas fa-users fa-3x text-primary mb-3"></i>#}
+                            <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🧑‍🤝‍🧑 </span>
+                            <h5 class="card-title">Clients</h5>
+                            <p class="card-text">Gérer les clients et leur historique d'achat (désactivé).</p>
+                            <a href="{{ path('app_pharmacy_customer_index') }}" class="btn btn-outline-secondary disabled" tabindex="-1" aria-disabled="true">Désactivé</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            {#<i class="fas fa-boxes fa-3x text-primary mb-3"></i>#}
+                            <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">📦 </span>
+                            <h5 class="card-title">Stock</h5>
+                            <p class="card-text">Gérer les produits, quantités et alertes.</p>
+                            <a href="{{ path('app_pharmacy_stock_index') }}" class="btn btn-outline-primary">Accéder</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            {#<i class="fas fa-tags fa-3x text-primary mb-3"></i>#}
+                            <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🏷️ </span>
+                            <h5 class="card-title">Catégories</h5>
+                            <p class="card-text">Classer les produits par catégories.</p>
+                            <a href="{{ path('app_pharmacy_category_index') }}" class="btn btn-outline-primary">Accéder</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            {#<i class="fas fa-shopping-cart fa-3x text-primary mb-3"></i>#}
+                            <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🛒 </span>
+                            <h5 class="card-title">Achats</h5>
+                            <p class="card-text">Enregistrer les commandes fournisseurs.</p>
+                            <a href="{{ path('app_pharmacy_achat_index') }}" class="btn btn-outline-primary">Accéder</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            {#<i class="fas fa-chart-line fa-3x text-primary mb-3"></i>#}
+                            <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">📈 </span>
+                            <h5 class="card-title">Ventes</h5>
+                            <p class="card-text">Enregistrer les ventes aux clients.</p>
+                            <a href="{{ path('app_pharmacy_vente_index') }}" class="btn btn-outline-primary">Accéder</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🧾 </span>
+                            <h5 class="card-title">Factures</h5>
+                            <p class="card-text">Enregistrer les Factures.</p>
+                            <a href="{{ path('app_pharmacy_invoice_index') }}" class="btn btn-outline-primary">Accéder</a>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-4 col-sm-6">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🧾 </span>
+                            <h5 class="card-title">Avoires</h5>
+                            <p class="card-text">Enregistrer les Avoires.</p>
+                            <a href="{{ path('app_pharmacy_credit_note_index') }}" class="btn btn-outline-primary">Accéder</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+{#        </main>
+    </div>
+</div> #}
+
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Voir les Détails de l'Achat {{ achat.reference }}{% endblock %}
+
+{% block content %}
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+ 
+        <h1>Détails</h1>
+        <a href="{{ path('app_pharmacy_achat_new') }}" class="btn btn-primary">Créer nouveau</a>
+    </div>
+
+    <a href="{{ path('app_pharmacy_achat_index') }}" class="btn btn-secondary">← Retour à la liste</a>
+
+    <table class="table table-striped">
+
+        <tbody>
+            {# <tr> #}
+                {# <th>Id</th> #}
+                {# <td>{{ achat.id }}</td> #}
+            {# </tr> #}
+            <tr>
+                <th>Référence</th>
+                <td>{{ achat.reference }}</td>
+            </tr>
+            <tr>
+                <th>Date Achat</th>
+                <td>{{ achat.dateAchat ? achat.dateAchat|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Total HT</th>
+                <td>{{ achat.totalHt }}</td>
+            </tr>
+            <tr>
+                <th>Total TVA</th>
+                <td>{{ achat.totalTva }}</td>
+            </tr>
+            <tr>
+                <th>Total TTC</th>
+                <td>{{ achat.totalTtc }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>
+                    <span class="badge bg-{{ achat.etat == 'delivered' ? 'success' : (achat.etat == 'cancelled' ? 'danger' : 'secondary') }}">
+                        {{ achat.etat }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Actions</th>
+                <td>
+                <a href="{{ path('app_pharmacy_achat_edit', {'id': achat.id}) }}" class="btn btn-warning">Modifier cet Achat</a>
+
+    {% if achat.etat != 'cancelled' %}
+        <form method="post" action="{{ path('app_pharmacy_achat_cancel', {'id': achat.id}) }}" onsubmit="return confirm('Are you sure you want to cancel this purchase? This will reverse stock if applicable.');" style="display: inline-block;">
+            <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ achat.id) }}">
+            <button class="btn btn-warning">Annuler Achat</button>
+        </form>
+    {% endif %}
+
+    {# { include('pharmacy/achat/_delete_form.html.twig') } #}
+    {# if is_granted('ROLE_ADMIN') and achat.etat == 'draft' #}
+    {% if achat.etat == 'draft' %}
+        <form method="post" action="{{ path('app_pharmacy_achat_delete', {'id': achat.id}) }}" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ achat.id) }}">
+            <button class="btn btn-danger">Supprimer</button>
+        </form>
+    {% endif %}
+
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <h3 class="text-white">Articles Achetés pour cet Achat</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Articles</th>
+                <th>Quantite</th>
+                <th>Prix Unitaire (HT)</th>
+                <th>% TVA</th>
+                <th>Total Ligne (HT)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in achat.achatItems %}
+                <tr>
+                    <td>{{ item.produit.designation }}</td>
+                    <td>{{ item.quantite }}</td>
+                    <td>{{ item.prixUnitaireHt }}</td>
+                    <td>{{ item.tvaPourcentage }}</td>
+                    <td>{{ item.totalLigneHt }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="4">Aucun enregistrement ! ...</td></tr>
+            {% endfor %}
+        </tbody> 
+    </table>
+
+    <a href="{{ path('app_pharmacy_achat_index') }}" class="btn btn-secondary">← Retour à la liste</a>
+{% endblock %}

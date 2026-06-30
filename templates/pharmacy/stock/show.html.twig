@@ -1,0 +1,236 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block title %}Détail produit - {{ stock.designation }}{% endblock %}
+
+{% block page_title %}Fiche produit{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Header with product name and actions -->
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div class="text-white">
+            <h1 class="h2 mb-1">{{ stock.designation }}</h1>
+            <p{# class="text-muted"#}>Référence : {{ stock.reference ?: '—' }}</p>
+        </div>
+        {{ include('pharmacy/stock/_delete_form.html.twig') }}
+        <div>
+            <a href="{{ path('app_pharmacy_stock_edit', {'id': stock.id}) }}" class="btn btn-warning me-2">
+                <i class="fas fa-edit"></i> Modifier
+            </a>
+            <a href="{{ path('app_pharmacy_stock_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left column: main info -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white fw-bold">
+                    <i class="fas fa-info-circle me-2"></i> Informations générales
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-3">Désignation</dt>
+                        <dd class="col-sm-9">{{ stock.designation }}</dd>
+                        
+                        <dt class="col-sm-3">Référence / Code‑barre</dt>
+                        <dd class="col-sm-9">{{ stock.reference ?: '—' }}</dd>
+                        
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9">{{ stock.description ?: '—' }}</dd>
+
+                        <dt>Date de péremption</dt>
+                        <dd>{{ stock.dateExpiration ? stock.dateExpiration|date('d/m/Y') : '—' }}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Pricing & Margin Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white fw-bold">
+                    <i class="fas fa-tags me-2"></i> Prix et marges
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="border rounded p-3 h-100 bg-light">
+                                <h6 class="text-primary">Achat</h6>
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-5">Prix d'achat HT</dt>
+                                    <dd class="col-sm-7">{{ stock.prixAchat|number_format(2, ',', ' ') }} €</dd>
+                                    <dt class="col-sm-5">TVA</dt>
+                                    <dd class="col-sm-7">{{ stock.tvaPourcentage|default(0)|number_format(0) }} %</dd>
+                                    <dt class="col-sm-5">Prix d'achat TTC</dt>
+                                    <dd class="col-sm-7 fw-bold">{{ (stock.prixAchat * (1 + (stock.tvaPourcentage|default(0)/100)))|number_format(2, ',', ' ') }} €</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <div class="border rounded p-3 h-100 bg-light">
+                                <h6 class="text-success">Vente</h6>
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-5">Prix de vente HT</dt>
+                                    <dd class="col-sm-7">{{ stock.prixDetail|number_format(2, ',', ' ') }} €</dd>
+                                    <dt class="col-sm-5">TVA</dt>
+                                    <dd class="col-sm-7">{{ stock.tvaPourcentage|default(0)|number_format(0) }} %</dd>
+                                    <dt class="col-sm-5">Prix de vente TTC</dt>
+                                    <dd class="col-sm-7 fw-bold">{{ (stock.prixDetail * (1 + (stock.tvaPourcentage|default(0)/100)))|number_format(2, ',', ' ') }} €</dd>
+                                </dl>
+                                <hr>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <span>💰 Marge bénéficiaire (HT)</span>
+                                    {% set margeHT = stock.prixDetail - stock.prixAchat %}
+                                    {% set margePercent = (stock.prixAchat > 0) ? (margeHT / stock.prixAchat * 100) : 0 %}
+                                    <span class="fw-bold {% if margeHT >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                        {{ margeHT|number_format(2, ',', ' ') }} € ({{ margePercent|number_format(1) }}%)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Management Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white fw-bold">
+                    <i class="fas fa-boxes me-2"></i> Gestion du stock
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="border rounded text-center p-3 bg-light">
+                                <span class="fs-1 fw-bold">{{ stock.quantite|default(0) }}</span>
+                                <div>Unités en stock</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border rounded text-center p-3 bg-light">
+                                <span class="fs-3 fw-bold">{{ stock.quantiteMin is defined ? stock.quantiteMin|default('—') : '—' }}</span>
+                                <div>Stock minimum</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border rounded text-center p-3 bg-light">
+                                <span class="fs-3 fw-bold">{{ stock.quantiteMax is defined ? stock.quantiteMax|default('—') : '—' }}</span>
+                                <div>Stock maximum</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right column: relations -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white fw-bold">
+                    <i class="fas fa-link me-2"></i> Relations
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Fournisseur</dt>
+                        <dd class="col-sm-8">
+                            {% if stock.fournisseur %}
+                                <a href="{{ path('app_pharmacy_fournisseur_show', {'id': stock.fournisseur.id}) }}">
+                                    {{ stock.fournisseur.raisonSocial }}
+                                </a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </dd>
+                        <dt class="col-sm-4">Catégorie</dt>
+                        <dd class="col-sm-8">
+                            {% if stock.categorie %}
+                                <a href="{{ path('app_pharmacy_category_show', {'id': stock.categorie.id}) }}">
+                                    {{ stock.categorie.nom }}
+                                </a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Additional info card (e.g., creation date) -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-bold">
+                    <i class="fas fa-calendar-alt me-2"></i> Autres
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-6">Créé le</dt>
+                        <dd class="col-sm-6">{#{ stock.createdAt ? stock.createdAt|date('d/m/Y H:i') : '—' }#}</dd>
+                        <dt class="col-sm-6">Dernière modification</dt>
+                        <dd class="col-sm-6">{#{ stock.updatedAt ? stock.updatedAt|date('d/m/Y H:i') : '—' }#}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional: display associated purchases and sales (as tabs) -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white">
+            <ul class="nav nav-tabs card-header-tabs" id="stockTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="purchases-tab" data-bs-toggle="tab" data-bs-target="#purchases" type="button" role="tab">Achats liés</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="sales-tab" data-bs-toggle="tab" data-bs-target="#sales" type="button" role="tab">Ventes liées</button>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="purchases" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr><th>Date</th><th>N° achat</th><th>Quantité</th><th>Prix unit. HT</th><th>Total HT</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for item in stock.achatItems %}
+                                    <tr><td>{{ item.achat.dateAchat|date('d/m/Y') }}</td><td>{{ item.achat.reference }}</td><td>{{ item.quantite }}</td><td>{{ item.prixUnitaireHt|number_format(2, ',', ' ') }} €</td><td>{{ item.totalLigneHt|number_format(2, ',', ' ') }} €</td></tr>
+                                {% else %}
+                                    <td><td colspan="5">Aucun achat enregistré pour ce produit.</tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="sales" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr><th>Date</th><th>N° vente</th><th>Client</th><th>Quantité</th><th>Prix unit. HT</th><th>Total HT</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for item in stock.venteItems %}
+                                    <tr><td>{{ item.vente.dateVente|date('d/m/Y') }}</td><td>{{ item.vente.reference }}</td><td>—</td><td>{{ item.quantite }}</td><td>{{ item.prixUnitaireHt|number_format(2, ',', ' ') }} €</td><td>{{ item.totalLigneHt|number_format(2, ',', ' ') }} €</td></tr>
+                                {% else %}
+                                    <td><td colspan="6">Aucune vente enregistrée pour ce produit.</tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      {{ include('pharmacy/stock/_delete_form.html.twig') }}
+       <div>
+            <a href="{{ path('app_pharmacy_stock_edit', {'id': stock.id}) }}" class="btn btn-warning me-2">
+                <i class="fas fa-edit"></i> Modifier
+            </a>
+       {# </div>#}
+        {#<div class="row">#}
+            <a href="{{ path('app_pharmacy_stock_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+</div>
+{% endblock %}

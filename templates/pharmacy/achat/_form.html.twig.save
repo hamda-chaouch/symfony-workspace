@@ -1,0 +1,165 @@
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_row(form.reference) }}
+    {{ form_row(form.date_achat) }}
+    {{ form_row(form.fournisseur) }}
+    {{ form_row(form.tva_pourcentage) }}
+    {{ form_row(form.etat) }}
+
+    <h3>Ajouter Produits à votre Achat</h3>
+    <ul id="achat-items-list" class="list-unstyled">
+            {% for item in form.AchatItems %}
+                <li class="row-item"> 
+                    {{ form_widget(item.produit) }}
+                    {{ form_widget(item.quantite) }}
+                    {{ form_widget(item.prix_unitaire_ht) }}
+                    <button type="button" class="remove-item btn btn-danger btn-sm">Remove</button>
+                </li>
+            {% endfor %}
+     </ul>
+    <button type="button" id="add-item" class="btn btn-sm btn-secondary">Ajouter</button>
+    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}
+
+
+
+
+<script>
+
+    // Helper: Rename indices in name/id attributes
+    function updateIndices(list) {
+        Array.from(list.children).forEach((row, idx) => {
+            // Update name attributes
+            row.querySelectorAll('[name]').forEach(field => {
+                field.name = field.name.replace(/\[[0-9]+\]/, `[${idx}]`);
+            });
+            // Update id attributes (optional)
+            row.querySelectorAll('[id]').forEach(field => {
+                field.id = field.id.replace(/_[0-9]+_/, `_${idx}_`);
+            });
+        });
+    }
+
+    // Helper: Clone a row and clear its values
+    function cloneRow(row) {
+        const newRow = row.cloneNode(true);
+        // Clear all input/select values
+        newRow.querySelectorAll('input, select').forEach(field => {
+            if (field.type !== 'checkbox' && field.type !== 'radio') {
+                field.value = '';
+            } else {
+                field.checked = false;
+            }
+        });
+        return newRow;
+    }
+
+    // Attach product listener (existing function)
+    function attachProductListener(container) {
+        let productSelect = container.querySelector('select[id$="_produit"]');
+        if (productSelect) {
+            productSelect.addEventListener('change', function() {
+                let selectedOption = this.options[this.selectedIndex];
+                let price = selectedOption.getAttribute('data-price') || 0;
+               let priceInput = container.querySelector('input[id$="_prix_unitaire_ht"]');
+                if (priceInput) priceInput.value = price;
+              
+            });
+        }
+    }
+
+
+
+    // Function to update product dropdown for a given row
+    function updateProductOptions(row, supplierId) {
+        let productSelect = row.querySelector('select[name$="[produit]"]');
+        if (!productSelect) return;
+        let currentValue = productSelect.value;
+        fetch('/pharmacy/achat/get-products/' + supplierId)
+            .then(response => response.json())
+            .then(products => {
+                productSelect.innerHTML = '<option value="">Choose a product</option>';
+                products.forEach(product => {
+                    let option = new Option(product.designation, product.id);
+                    option.setAttribute('data-price', product.prix_unitaire_ht);
+                    productSelect.appendChild(option);
+                });
+                if (currentValue) {
+                    productSelect.value = currentValue; // restore if still valid
+                }
+            });
+    }
+
+
+    {# document.getElementById('add-item').addEventListener('click', function() {
+        let container = document.getElementById('achat-items-list');
+        let prototype = container.dataset.prototype;
+        let index = container.children.length;
+        let newForm = prototype.replace(/__name__/g, index);
+        let li = document.createElement('li');
+        li.innerHTML = newForm;
+        container.appendChild(li);
+        attachProductListener(li); // attach event to the new row
+    }); #}
+
+
+    const list = document.getElementById('achat-items-list');
+    const addButton = document.getElementById('add-item');
+
+    // Existing rows: attach product listeners (to existing items on page load)
+    if (list) {
+        document.querySelectorAll('#achat-items-list li').forEach(attachProductLis>
+    }
+
+    // When the supplier dropdown changes
+    let supplierSelect = document.querySelector('select[name$="[fournisseur]"]');
+    if (supplierSelect) {
+        supplierSelect.addEventListener('change', function() {
+            let supplierId = this.value;
+            if (!supplierId) return;
+            window.selectedSupplier = supplierId;
+            // Update all existing rows
+            document.querySelectorAll('#achat-items-list li').forEach(row => {
+                updateProductOptions(row, supplierId);
+            });
+        });
+        // Trigger initial load if supplier is preselected
+        if (supplierSelect.value) {
+            supplierSelect.dispatchEvent(new Event('change'));
+        }
+    }
+
+
+
+    // Add new row by cloning the first row (if any)
+    if (addButton) {
+        addButton.addEventListener('click', function() {
+            if (list.children.length === 0) return;
+            const firstRow = list.children[0];
+            const newRow = cloneRow(firstRow);
+            list.appendChild(newRow);
+            updateIndices(list);
+            attachProductListener(newRow);
+            if (window.selectedSupplier) {
+                updateProductOptions(newRow, window.selectedSupplier);
+            }
+        });
+    }
+
+    // Delete row using event delegation (works for existing and future rows)
+    if (list) {
+        list.addEventListener('click', function(e) {
+            const removeBtn = e.target.closest('.remove-item');
+            if (removeBtn) {
+                const row = removeBtn.closest('li');
+                //if (row) row.remove();
+                if (row && list.children.length > 1) {
+                    row.remove();
+                    updateIndices(list);
+                }
+            }
+        });
+    }
+
+</script>
+

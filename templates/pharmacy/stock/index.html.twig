@@ -1,0 +1,65 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Gestion du Stock{% endblock %}
+
+{% block content %}
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+        <h1>Liste des produits</h1>
+        <a href="{{ path('app_pharmacy_stock_new') }}" class="btn btn-primary">Créer nouveau</a>
+    </div>
+
+    <li><a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour à l'Accueil</a></li>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-sm border-2 rounded-3 overflow-hidden shadow-sm">
+        <thead class="table-light border-bottom-0">
+            <tr class="border-0">
+                <th>Actions</th>
+                <th>Designation</th>
+                <th>Reference</th>
+                <th>Date de péremption</th>
+                <th>Prix d'Achat</th>
+                <th>Prix de Gros</th>
+                <th>Prix de Vente Detail</th>
+                <th>% TVA</th>
+                <th>Quantite</th>
+                <th>Quantite_min</th>
+                <th>Quantite_max</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for stock in stocks %}
+            <tr>
+                <td>
+                  <div class="btn-group btn-group-sm" role="group">
+                    <a href="{{ path('app_pharmacy_stock_show', {'id': stock.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                    <a href="{{ path('app_pharmacy_stock_edit', {'id': stock.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                  </div>
+                </td>
+                <td>{{ stock.designation }}</td>
+                <td>{{ stock.reference }}</td>
+                <td>{{ stock.dateExpiration ? stock.dateExpiration|date('d/m/Y') : '—' }}</td>
+                <td>{{ stock.prixAchat }}</td>
+                <td>{{ stock.prixGros }}</td>
+                <td>{{ stock.prixDetail }}</td>
+                <td>{{ stock.tvaPourcentage }}</td>
+                <td>{{ stock.quantite }}</td>
+                <td>{{ stock.quantiteMin }}</td>
+                <td>{{ stock.quantiteMax }}</td>
+                <td>{{ stock.description }}</td>
+                <td>{{ stock.categorie ? stock.categorie.nom : '-' }}</td>
+                <td>{{ stock.fournisseur ? stock.fournisseur.raisonSocial : '-' }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">Aucun enregistrement</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <li><a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour à l'Accueil</a></li>
+{% endblock %}

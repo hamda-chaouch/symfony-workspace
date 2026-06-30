@@ -1,0 +1,12 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Créer un Nouveau Client{% endblock %}
+
+{% block content %}
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+        <h1>Nouveau</h1>
+    </div>
+    {{ include('pharmacy/customer/_form.html.twig') }}
+
+    <a href="{{ path('app_pharmacy_customer_index') }}" class="btn btn-secondary">Retour à la Liste</a>
+{% endblock %}

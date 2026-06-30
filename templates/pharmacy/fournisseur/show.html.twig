@@ -1,0 +1,74 @@
+
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Afficher Détails du Fournisseur {{ fournisseur.raisonSocial }}{% endblock %}
+
+{% block content %}
+
+
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+        <h1>Détails</h1>
+            <a href="{{ path('app_pharmacy_fournisseur_new') }}" class="btn btn-primary">Créer nouveau</a>
+    </div>
+
+    <a href="{{ path('app_pharmacy_fournisseur_index') }}" class="btn btn-secondary">← Retour à la Liste</a>
+
+    <table class="table table-striped">
+        <tbody>
+{#            <tr>
+                <th>Id</th>
+                <td>{{ fournisseur.id }}</td>
+            </tr> #}
+            <tr>
+                <th>Nom</th>
+                <td>{{ fournisseur.raisonSocial }}</td>
+            </tr>
+            <tr>
+                <th>Responsable</th>
+                <td>{{ fournisseur.responsable }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ fournisseur.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Telephone_fixe</th>
+                <td>{{ fournisseur.telephoneFixe }}</td>
+            </tr>
+            <tr>
+                <th>Fax</th>
+                <td>{{ fournisseur.fax }}</td>
+            </tr>
+            <tr>
+                <th>Gsm</th>
+                <td>{{ fournisseur.gsm }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ fournisseur.email }}</td>
+            </tr>
+            <tr>
+                <th>Actions</th>
+                <td>
+    <a href="{{ path('app_pharmacy_fournisseur_edit', {'id': fournisseur.id}) }}" class="btn btn-warning">Modifier</a>
+
+    {{ include('pharmacy/fournisseur/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 class="text-white">Produits achetés de la part de ce Fournisseur</h3>
+    <ul>
+       {% for product in fournisseur.stocks %}
+            <li>
+                <a class="bg-primary text-white" href="{{ path('app_pharmacy_stock_show', {'id': product.id}) }}">
+                    {{ product.designation }}
+                </a>
+            </li>
+        {% else %}
+            <li>Pas de produits pour ce Fournisseur.</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

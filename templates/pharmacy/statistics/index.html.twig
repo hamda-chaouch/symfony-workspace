@@ -1,0 +1,141 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Statistiques{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .stat-card {
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .trend-up { color: #28a745; }
+        .trend-down { color: #dc3545; }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <!-- KPI Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card stat-card shadow-sm border-primary h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted text-uppercase">Ventes (ce mois)</h6>
+                            <h2 class="fw-bold">{{ currentSales|number_format(2, ',', ' ') }} €</h2>
+                            <small class="{{ salesChange >= 0 ? 'trend-up' : 'trend-down' }}">
+                                {{ salesChange > 0 ? '+' : '' }}{{ salesChange|number_format(1) }}% vs mois dernier
+                            </small>
+                        </div>
+                        <i class="fas fa-chart-line fa-3x text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card shadow-sm border-success h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted text-uppercase">Achats (ce mois)</h6>
+                            <h2 class="fw-bold">{{ currentPurchases|number_format(2, ',', ' ') }} €</h2>
+                            <small class="{{ purchasesChange >= 0 ? 'trend-up' : 'trend-down' }}">
+                                {{ purchasesChange > 0 ? '+' : '' }}{{ purchasesChange|number_format(1) }}% vs mois dernier
+                            </small>
+                        </div>
+                        <i class="fas fa-shopping-cart fa-3x text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card shadow-sm border-warning h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted text-uppercase">Bénéfice (ce mois)</h6>
+                            <h2 class="fw-bold">{{ currentProfit|number_format(2, ',', ' ') }} €</h2>
+                            <small class="{{ profitChange >= 0 ? 'trend-up' : 'trend-down' }}">
+                                {{ profitChange > 0 ? '+' : '' }}{{ profitChange|number_format(1) }}% vs mois dernier
+                            </small>
+                        </div>
+                        <i class="fas fa-coins fa-3x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Chart (last 7 days) -->
+    <div class="card mb-5 shadow-sm">
+        <div class="card-header bg-white fw-bold">Évolution des ventes (7 derniers jours)</div>
+        <div class="card-body">
+            <canvas id="salesChart" height="120"></canvas>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white fw-bold">Top 5 produits vendus (ce mois)</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr><th>Produit</th><th>Quantité vendue</th><th>CA estimé (TTC)</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for product in topProducts %}
+                            <tr>
+                                <td>{{ product.product }}</td><td>{{ product.total_qty }}</td><td>–</td>
+                            </tr>
+                        {% else %}
+                            <td><td colspan="3">Aucune vente ce mois.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <li><a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour à l'Accueil</a></li>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }} {# it ensures that any scripts defined in the parent (like Bootstrap JS) are still loaded. #}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const labels = {{ dailySalesLabels|json_encode|raw }};
+            const data = {{ dailySalesValues|json_encode|raw }};
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ventes TTC (€)',
+                        data: data,
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderColor: '#0d6efd',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(2)} €` } }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

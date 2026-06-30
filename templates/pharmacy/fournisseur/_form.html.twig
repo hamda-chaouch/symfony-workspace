@@ -1,0 +1,46 @@
+{{ form_start(form) }}
+    <style>
+        .form-group-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .form-group-card legend {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c3e50;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            width: auto;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #1e466e;
+            margin-bottom: 0.25rem;
+        }
+       /* Dim help text */
+       .form-text {
+            font-size: 0.7rem;
+            color: #aaa !important;
+            opacity: 0.6;
+            margin-top: 0.2rem;
+            font-style: italic;
+        }
+    </style>
+    <fieldset class="form-group-card mb-4 p-3 border rounded">
+        <legend class="fs-5 fw-bold text-primary">🚚 Fournisseur</legend>
+        {{ form_row(form.raisonSocial) }}
+        {{ form_row(form.adresse) }}
+        {{ form_row(form.responsable) }}
+        {{ form_row(form.gsm) }}
+        {{ form_row(form.telephone_fixe) }}
+        {{ form_row(form.fax) }}
+        {{ form_row(form.email) }}
+    </fieldset>
+    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

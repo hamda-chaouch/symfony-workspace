@@ -1,0 +1,51 @@
+{% extends 'pharmacyBase.html.twig' %}
+
+{% block page_title %}Gestion des Achats{% endblock %}
+
+{% block content %}
+    <div class="text-white d-flex justify-content-between align-items-center mb-3">
+
+        <h1>Liste des Achats</h1>
+        <a href="{{ path('app_pharmacy_achat_new') }}" class="btn btn-primary">Créer nouveau</a>
+    </div>
+
+    <li><a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour à l'Accueil</a></li>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-sm border-2 rounded-3 overflow-hidden shadow-sm">
+        <thead class="table-light border-bottom-0">
+            <tr class="border-0">                <th>Id</th>
+                <th>Référence</th>
+                <th>Date Achat</th>
+                <th>Total HT</th>
+                <th>Total TVA</th>
+                <th>Total TTC</th>
+                <th>Etat</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for achat in achats %}
+            <tr>
+                <td>{{ achat.id }}</td>
+                <td>{{ achat.reference }}</td>
+                <td>{{ achat.dateAchat ? achat.dateAchat|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ achat.totalHt }}</td>
+                <td>{{ achat.totalTva }}</td>
+                <td>{{ achat.totalTtc }}</td>
+                <td>{{ achat.etat }}</td>
+                <td>
+                    <a href="{{ path('app_pharmacy_achat_show', {'id': achat.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                    <a href="{{ path('app_pharmacy_achat_edit', {'id': achat.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucun enregisrement trouvé !</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <li><a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour à l'Accueil</a></li>
+{% endblock %}

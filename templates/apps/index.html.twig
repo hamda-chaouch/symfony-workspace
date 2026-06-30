@@ -1,0 +1,96 @@
+{# templates/home/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Project Hub | DevEngineerings{% endblock %}
+
+{% block body %}
+{# At the top, inside the container #}
+
+    <a href="{{ path('home') }}" class="btn btn-secondary" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">← Back to Home</a>
+
+    <div class="container">
+        <h1>Welcome to Development Engineering</h1>
+        <p>Select a project to manage:</p>
+
+        <div class="projects">
+           {# <div class="row"> #}
+                {% for project in projects %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                {# % if project.icon %}
+                                    <i class="{{ project.icon }} fa-2x mb-2 text-primary"></i>
+                                {% endif % #}
+                                <h5 class="card-title">{{ project.name }}</h5>
+                                <p class="card-text">{{ project.description }}</p>
+                                <a href="{{ project.path }}" class="btn btn-outline-primary" {% if project.external is defined and project.external %}target="_blank"{% endif %}>
+                                    Learn more
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {# </div> #}
+
+        </div>
+    </div>
+
+    <style>
+        body {
+            background-image: url('/images/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .projects {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px 20px;
+            width: 260px;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .project-card h2 {
+            margin: 10px 0;
+            font-size: 1.5rem;
+        }
+        .project-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    </style>
+{% endblock %}

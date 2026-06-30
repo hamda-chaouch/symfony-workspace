@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AchatItem{% endblock %}
+
+{% block body %}
+    <h1>AchatItem</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ achat_item.id }}</td>
+            </tr>
+            <tr>
+                <th>Quantite</th>
+                <td>{{ achat_item.quantite }}</td>
+            </tr>
+            <tr>
+                <th>Prix_unitaire_ht</th>
+                <td>{{ achat_item.prixUnitaireHt }}</td>
+            </tr>
+            <tr>
+                <th>Tva_pourcentage</th>
+                <td>{{ achat_item.tvaPourcentage }}</td>
+            </tr>
+            <tr>
+                <th>Total_ligne_ht</th>
+                <td>{{ achat_item.totalLigneHt }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pharmacy_achat_item_index') }}">back to list</a>
+
+    <a href="{{ path('app_pharmacy_achat_item_edit', {'id': achat_item.id}) }}">edit</a>
+
+    {{ include('pharmacy/achat_item/_delete_form.html.twig') }}
+{% endblock %}
