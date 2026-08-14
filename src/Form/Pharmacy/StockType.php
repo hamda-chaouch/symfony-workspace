@@ -1,3 +1,4 @@
+<?php
 /*
  * Copyright (c) 2025 Hamda Chaouch.
  *
@@ -14,9 +15,6 @@
  * limitations under the License.
  */
 
-
-
-<?php
 
 namespace App\Form\Pharmacy;
 
@@ -51,9 +49,9 @@ class StockType extends AbstractType
 
         // ========== Pricing ==========
         ->add('prix_achat', NumberType::class, [
-            'label' => "Prix d'achat HT",
-            'attr' => ['placeholder' => 'Prix d’achat unitaire', 'class' => 'form-control'],
-            'help' => 'Prix payé au fournisseur.',
+            'label' => "Prix d'achat TTC",
+            'attr' => ['placeholder' => 'Prix d’achat unitaire TTC', 'class' => 'form-control'],
+            'help' => 'Prix payé au fournisseur, toutes les taxes comprises.',
         ])
         ->add('prix_gros', NumberType::class, [
             'label' => 'Prix de gros (PVG)',
@@ -62,29 +60,34 @@ class StockType extends AbstractType
         ])
         //to be used to calculate the PVD automatically
         ->add('marge', NumberType::class, [
-            'label' => 'Marge Beneficiaire',
+            'label' => 'Marge Beneficiaire (%)',
             'mapped' => false,           // not stored in database
-            'attr' => ['placeholder' => 'marge beneficiaire', 'class' => 'form-control'],
+            'attr' => [
+                    'placeholder' => 'Ex: 35 pour 35%', 
+                    'min' => 0,
+                    'step' => '0.01',
+                    'class' => 'form-control']
         ])
         //calculated automatically 
         ->add('prix_detail', NumberType::class, [
-            'label' => 'Prix de détail (PVD)',
+            'label' => 'Prix de vente TTC (Publique)',
             //'disabled' => true,  // user cannot edit it manually //commented because disabled fields its value cannot reach the entity
             'attr' => ['readonly' => true, 'class' => 'form-control-plaintext'],
         ])
-        ->add('tva_pourcentage', NumberType::class, [
+/*        ->add('tva_pourcentage', NumberType::class, [
             'label' => 'TVA (%)',
             'required' => false,
             'attr' => ['placeholder' => 'Ex: 20', 'class' => 'form-control', 'step' => '0.1'],
             'help' => 'Taux de TVA applicable à ce produit.',
-        ])
+        ])*/
         //an indicator field (calculated automatically dinamically)
-        ->add('prix_ttc', NumberType::class, [
-            'label' => 'Prix de vente TTC',
+        //--->non‑mapped field dont be added to DB (dont have field)
+/*        ->add('prix_ttc', NumberType::class, [
+            'label' => 'Prix de vente TTC (Publique)',
             'mapped' => false,           // not stored in database
             'disabled' => true,          // user cannot edit it manually
             'attr' => ['readonly' => true, 'class' => 'form-control-plaintext'],
-        ])
+        ])*/
         // ========== Inventory ==========
         ->add('quantite', IntegerType::class, [
             'label' => 'Stock actuel',

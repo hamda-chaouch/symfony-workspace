@@ -14,8 +14,10 @@
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" href="#home">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/apps">PROJECTS</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#portfolio">PORTFOLIO</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/apps">All PROJECTS</a></li>
+ 		    <li class="nav-item"><a class="nav-link" href="/vr-studio">VR/XR STUDIO</a></li>
+  		    <li class="nav-item"><a class="nav-link" href="#robotics">ROBOTICS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/services">SERVICES</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">ABOUT US</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">CONTACT</a></li>
                 </ul>
@@ -27,7 +29,7 @@
     <header class="bg-primary text-white text-center py-5">
         <div> {# class="container"> #}
             <h1>Development Engineering</h1>
-            <p class="lead">Custom software development, custom Mechatronic systems, VR/AR Meta Quest applications/accessories design, and Business Automation.</p>
+            <p class="lead">Custom software development | custom Mechatronic systems | VR/XR apps design | VR/XR Accessories design | Business Automation.</p>
             <a href="/apps" class="btn btn-light btn-lg">View Our Projects</a>
         </div>
     </header>
@@ -41,13 +43,15 @@
                     <h2>About Us</h2>
                 </div> #}
                 <div class="col-lg-8">
-                    
-                    <p>We bridge the gap between software and hardware, building robust web applications, embedded systems, and immersive VR experiences. 
-Our solutions help businesses <strong>manage inventory, synchronize stock with our online Marketplace, automate Trading, and connect mobile apps to powerful backends</strong> 
-.</p>
+                    <img src="{{ asset('images/banner.jpg') }}" alt="banner" class="img-fluid" >
+                    <p> Through Development Engineering Services, We work on innovative projects ranging from industrial automation and custom electronics to immersive VR experiences
+                         and software development.
+                      We enjoy sharing knowledge, mentoring students, building communities, and exploring new technologies that bridge engineering and creativity.</p> 
                 </div>
                 <div class="col-lg-4 text-center mb-4 mb-lg-0">
-                    <p><strong>Hamda Chaouch</strong> – lead developer with over 13 years of experience in full‑stack development, mechatronics and Embedded Systems, and VR/AR apps/accessories development.</p>
+                    <p><strong>Hamda Chaouch</strong> – Mechatronics Engineer, developer, maker, and VR enthusiast passionate about transforming ideas into real-world solutions.
+                        With over<strong> 17 years</strong> of experience in<strong> Qt/C++ development</strong> and<strong> Mechatronics
+</strong>|<strong> Embedded Systems</strong> and<strong> IoT Solutions</strong> |<strong> AI</strong> | <strong> VR/XR apps/accessories design</strong>.</p>
                     <img src="{{ asset('images/portrait.jpg') }}" alt="Hamda Chaouch – Founder" class="img-fluid rounded-circle" style="max-width: 200px;">
                 </div>
             </div>
@@ -78,11 +82,85 @@ Our solutions help businesses <strong>manage inventory, synchronize stock with o
     </section>
 
     <!-- Projects Preview -->
-    <section>
+
+<!-- VR/XR Studio Section -->
+<section>
         <div id="portfolio" class="container">
             <h2 class="text-center mb-4">Featured Projects</h2>
-            <div class="row">
-                <div class="col-md-4 mb-3">
+
+	    <div class="container" id="vr-studio">
+     	         <h4 class="text-center mb-4">🥽 VR/XR Studio</h4>
+       		 <div class="row">
+                      <div class="col-lg-6 mb-4 mb-lg-0">
+                          <div class="card h-100 shadow-sm">
+                               <div class="card-body text-center">
+                                    <span style="font-size: 4rem; display: block; margin-bottom: 1rem;">🎮</span>
+                                    <h4>VR Accessories Design</h4>
+                                    <p class="card-text">Custom VR accessories: foot tracking belt, NLP controller, omnidirectional treadmill.</p>
+                               </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-6">
+                           <div class="card h-100 shadow-sm">
+                              <div class="card-body text-center">
+                              <span style="font-size: 4rem; display: block; margin-bottom: 1rem;">🎯</span>
+                              <h4>VR App Development</h4>
+                              <p class="card-text">Full‑body character design, combat, football, meditation, and adventure games.</p>
+                           </div>
+                      </div>
+                  </div>
+             </div>
+           <div class="text-center mt-4">
+                 <a href="{{ path('app_apps', {category: 'vr'}) }}" class="btn btn-primary">
+                     Explore VR/XR Projects
+                 </a>
+           </div>
+
+          <!-- Robotics & Automation Section -->
+         <div class="container mt-5" id="robotics">
+            <h4 class="text-center mb-4">🤖 Robotics & Automation</h4>
+            <div class="row justify-content-center">
+              <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🤖</span>
+                        <h5>Robot Waiter</h5>
+                        <p class="card-text small">Autonomous robot for coffee shops and restaurants.</p>
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">📱</span>
+                        <h5>Self-Service Tablets</h5>
+                        <p class="card-text small">Android app on customer tablets for ordering and payments.</p>
+                    </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">🤖  Binance Trading Bot</h5>
+                            <p class="card-text">Automated cryptocurrency trading with Telegram alerts and real-time monitoring.</p>
+                            <a href="/binance" class="btn btn-outline-primary">Learn more</a>
+                        </div>
+                    </div>
+              </div>
+
+            </div>
+            <div class="text-center mt-3">
+              <a href="{{ path('app_apps', {category: 'robotics'}) }}" class="btn btn-primary">
+                View Robotics Projects
+              </a>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+           <h4 class="text-center mb-4">🛒  E-Commerce</h4>
+              <div class="row">
+                <div class="col-md-12 mb-3">
                     <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">🛒 I Buy E‑commerce</h5>
@@ -91,22 +169,45 @@ Our solutions help businesses <strong>manage inventory, synchronize stock with o
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">🤖  Binance Trading Bot</h5>
-                            <p class="card-text">Automated cryptocurrency trading with Telegram alerts and real-time monitoring.</p>
-                            <a href="/binance" class="btn btn-outline-primary">Learn more</a>
-                        </div>
-                    </div>
+                <div class="text-center mt-4">
+                  <a href="/apps" class="btn btn-primary">View All Projects</a>
                 </div>
-              
+             </div>
+        </div>
+  </div>
+</section>
+
+<section id="services-preview">
+    <div class="container">
+        <h2 class="text-center mb-4">Our Services</h2>
+        <p class="text-center text-muted mb-5">What we can do for you</p>
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <i class="fas fa-code fa-3x text-primary mb-3"></i>
+                <h5>Web Development</h5>
+                <p class="small">Custom apps, APIs, e‑commerce.</p>
             </div>
-            <div class="text-center mt-4">
-                <a href="/apps" class="btn btn-primary">View All Projects</a>
+            <div class="col-md-3 text-center">
+                <i class="fas fa-vr-cardboard fa-3x text-primary mb-3"></i>
+                <h5>VR/XR Experiences</h5>
+                <p class="small">Immersive apps & accessories.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                <h5>Robotics & Automation</h5>
+                <p class="small">Service robots & embedded systems.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <i class="fas fa-microchip fa-3x text-primary mb-3"></i>
+                <h5>Mechatronics</h5>
+                <p class="small">Mechanical, electronic & software integration.</p>
             </div>
         </div>
-    </section>
+        <div class="text-center mt-4">
+            <a href="/services" class="btn btn-outline-primary">View All Services</a>
+        </div>
+    </div>
+</section>
 
     <!-- Contact + Socials (gray background) -->
     <section id="contact">
@@ -132,8 +233,8 @@ Our solutions help businesses <strong>manage inventory, synchronize stock with o
                             {# <a href="https://www.reddit.com/user/hamda-chaouch/" target="_blank" class="text-white me-3" title="Reddit Profile"><i class="fab fa-reddit fa-2x"></i></a> #}
                             <a href="https://www.reddit.com/r/VR_Engineering_Lab/" target="_blank" class="text-white me-3" title="VR Engineering Lab Subreddit"><i class="fab fa-reddit-alien fa-2x"></i></a>
                             <a href="https://discord.gg/MQM2ZQZHkZ" target="_blank" class="text-white me-3"><i class="fab fa-discord fa-2x"></i></a>
-                            <a href="https://youtube.com/@development.engineering" target="_blank" class="text-white me-3"><i class="fab fa-youtube fa-2x"></i></a>
-
+                            <a href="https://youtube.com/@dev-labo" target="_blank" class="text-white me-3"><i class="fab fa-youtube fa-2x"></i></a>
+                            <a href="https://youtube.com/@vr-studioo" target="_blank" class="text-white me-3"><i class="fab fa-youtube fa-2x"></i></a>
                             <a href="https://t.me/hamda_chaouch" target="_blank" class="text-white me-3"><i class="fab fa-telegram fa-2x"></i></a>
                             <a href="mailto:development.engineering.s@gmail.com" class="text-white"><i class="fas fa-envelope fa-2x"></i></a>
 

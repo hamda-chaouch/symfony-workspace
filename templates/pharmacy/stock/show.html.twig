@@ -58,12 +58,12 @@
                             <div class="border rounded p-3 h-100 bg-light">
                                 <h6 class="text-primary">Achat</h6>
                                 <dl class="row mb-0">
-                                    <dt class="col-sm-5">Prix d'achat HT</dt>
-                                    <dd class="col-sm-7">{{ stock.prixAchat|number_format(2, ',', ' ') }} €</dd>
-                                    <dt class="col-sm-5">TVA</dt>
-                                    <dd class="col-sm-7">{{ stock.tvaPourcentage|default(0)|number_format(0) }} %</dd>
                                     <dt class="col-sm-5">Prix d'achat TTC</dt>
-                                    <dd class="col-sm-7 fw-bold">{{ (stock.prixAchat * (1 + (stock.tvaPourcentage|default(0)/100)))|number_format(2, ',', ' ') }} €</dd>
+                                    <dd class="col-sm-7">{{ stock.prixAchat|number_format(2, ',', ' ') }} dT</dd>
+                                    {#<dt class="col-sm-5">TVA</dt>#}
+                                    {#<dd class="col-sm-7">{{ stock.tvaPourcentage|default(0)|number_format(0) }} %</dd>#}
+                                    {#<dt class="col-sm-5">Prix d'achat HT</dt>#}
+                                    {#<dd class="col-sm-7 fw-bold">{{ (stock.prixAchat / (1 + (stock.tvaPourcentage|default(0)/100)))|number_format(2, ',', ' ') }} dT</dd>#}
                                 </dl>
                             </div>
                         </div>
@@ -71,20 +71,20 @@
                             <div class="border rounded p-3 h-100 bg-light">
                                 <h6 class="text-success">Vente</h6>
                                 <dl class="row mb-0">
-                                    <dt class="col-sm-5">Prix de vente HT</dt>
-                                    <dd class="col-sm-7">{{ stock.prixDetail|number_format(2, ',', ' ') }} €</dd>
-                                    <dt class="col-sm-5">TVA</dt>
-                                    <dd class="col-sm-7">{{ stock.tvaPourcentage|default(0)|number_format(0) }} %</dd>
                                     <dt class="col-sm-5">Prix de vente TTC</dt>
-                                    <dd class="col-sm-7 fw-bold">{{ (stock.prixDetail * (1 + (stock.tvaPourcentage|default(0)/100)))|number_format(2, ',', ' ') }} €</dd>
+                                    <dd class="col-sm-7">{{ stock.prixDetail|number_format(2, ',', ' ') }} dT</dd>
+                                    {#<dt class="col-sm-5">TVA</dt>#}
+                                    {#<dd class="col-sm-7">{{ stock.tvaPourcentage|default(0)|number_format(0) }} %</dd>#}
+                                    {#<dt class="col-sm-5">Prix de vente TTC</dt>#}
+                                    {#<dd class="col-sm-7 fw-bold">{{ (stock.prixDetail * (1 + (stock.tvaPourcentage|default(0)/100)))|number_format(2, ',', ' ') }} dT</dd>#}
                                 </dl>
                                 <hr>
                                 <div class="d-flex justify-content-between mt-2">
-                                    <span>💰 Marge bénéficiaire (HT)</span>
-                                    {% set margeHT = stock.prixDetail - stock.prixAchat %}
-                                    {% set margePercent = (stock.prixAchat > 0) ? (margeHT / stock.prixAchat * 100) : 0 %}
-                                    <span class="fw-bold {% if margeHT >= 0 %}text-success{% else %}text-danger{% endif %}">
-                                        {{ margeHT|number_format(2, ',', ' ') }} € ({{ margePercent|number_format(1) }}%)
+                                    <span>💰 Marge bénéficiaire TTC))</span>
+                                    {% set marge = stock.prixDetail - stock.prixAchat %}
+                                    {% set margePercent = (stock.prixAchat > 0) ? (marge / stock.prixAchat * 100) : 0 %}
+                                    <span class="fw-bold {% if marge >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                        {{ marge|number_format(2, ',', ' ') }} dT ({{ margePercent|number_format(1) }}%)
                                     </span>
                                 </div>
                             </div>

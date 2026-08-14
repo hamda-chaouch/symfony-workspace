@@ -13,3 +13,12 @@ controllers:
 app_logout:
     path: /pharmacy/logout
     controller: Symfony\Bundle\SecurityBundle\Security\LogoutController
+
+#vr_studio:
+#    path: /vr-studio
+#    controller: App\Controller\VrStudioController::index
+
+#trading_hub:
+#    path: /trading
+#    controller: App\Controller\TradingController::index
+    #controller: App\Controller\TradingBot\TradingController::index

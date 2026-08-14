@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Our Services | Development Engineering{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <a href="{{ path('home') }}" class="btn btn-secondary" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">← Back to Home</a>    
+
+    <div class="mb-3 col-md-12 col-lg-12">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-body text-center">
+    		<div class="text-center mb-5">
+                    	 <h1 class="display-4 fw-bold">🚀 Our Services</h1>
+                         <p class="lead text-muted">We deliver end‑to‑end engineering solutions – from web to VR to robotics.</p>
+                </div> 
+             </div>
+	</div>
+    </div>
+
+    <div class="row g-4">
+        {% for service in services %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0 hover-card">
+                    <div class="card-body text-center">
+                        <div class="icon-wrapper mb-3">
+                            <i class="{{ service.icon }} fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">{{ service.name }}</h4>
+                        <p class="card-text text-muted">{{ service.description }}</p>
+                        {% if service.features is defined %}
+                            <ul class="list-unstyled text-start small mt-3">
+                                {% for feature in service.features %}
+                                    <li><i class="fas fa-check-circle text-success me-2"></i>{{ feature }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <a href="#contact" class="btn btn-outline-primary mt-3">Get in touch</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Call to Action -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="bg-primary text-white p-5 rounded-3 text-center">
+                <h2 class="fw-bold">Ready to start your project?</h2>
+                <p class="lead">Let's discuss how we can help you achieve your goals.</p>
+                <a href="#contact" class="btn btn-light btn-lg">Contact us today</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Contact + Socials (gray background) -->
+    <section id="contact">
+        <div class="contact-socials py-4 bg-secondary text-white mt-5">
+        {#    <div class="container"> #}
+                <div class="row mx-3">
+                    <div class="col-12 col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        <h5>Contact</h5>
+                        <address class="mb-0">
+                            <strong>Development Engineering</strong><br>
+                            Street Abdelkader M'hallah, Complex "EL HAJJAR" GF, Monastir, Tunisia<br>
+                            <i class="fas fa-phone-alt me-1"></i> +216 98 411 682{# / +216 73 477 211#}<br>
+                            <i class="fas fa-envelope me-1"></i> development.engineering.s@gmail.com
+                        </address>
+                    </div>
+                    <div class="col-12 col-md-6 text-center text-md-end">
+                        <h5>Follow us</h5>
+                        <div class="social-icons">
+                            <a href="https://github.com/hamda-chaouch" target="_blank" class="text-white me-3"><i class="fab fa-github fa-2x"></i></a>
+                            <a href="https://linkedin.com/in/hamda-chaouch" target="_blank" class="text-white me-3"><i class="fab fa-linkedin fa-2x"></i></a>
+                            <a href="https://twitter.com/hamda_chaouch" target="_blank" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                            <!-- new Reddit links -->
+                            {# <a href="https://www.reddit.com/user/hamda-chaouch/" target="_blank" class="text-white me-3" title="Reddit Profile"><i class="fab fa-reddit fa-2x"></i></a> #}
+                            <a href="https://www.reddit.com/r/VR_Engineering_Lab/" target="_blank" class="text-white me-3" title="VR Engineering Lab Subreddit"><i class="fab fa-reddit-alien fa-2x"></i></a>
+                            <a href="https://discord.gg/MQM2ZQZHkZ" target="_blank" class="text-white me-3"><i class="fab fa-discord fa-2x"></i></a>
+                            <a href="https://youtube.com/@dev-labo" target="_blank" class="text-white me-3"><i class="fab fa-youtube fa-2x"></i></a>
+                            <a href="https://youtube.com/@vr-studioo" target="_blank" class="text-white me-3"><i class="fab fa-youtube fa-2x"></i></a>
+                            <a href="https://t.me/hamda_chaouch" target="_blank" class="text-white me-3"><i class="fab fa-telegram fa-2x"></i></a>
+                            <a href="mailto:development.engineering.s@gmail.com" class="text-white"><i class="fas fa-envelope fa-2x"></i></a>
+
+                        </div>
+                    </div>
+                </div>
+         {#  </div> #}
+        </div>
+    </section>
+
+<style>
+        body {
+            background-image: url('/images/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    .hover-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
+    }
+    .icon-wrapper {
+        display: inline-block;
+        background: rgba(13, 110, 253, 0.1);
+        padding: 15px;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+    }
+    .icon-wrapper i {
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}

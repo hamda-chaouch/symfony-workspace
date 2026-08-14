@@ -1,3 +1,4 @@
+<?php
 /*
  * Copyright (c) 2025 Hamda Chaouch.
  *
@@ -15,7 +16,6 @@
  */
 
 
-<?php
 
 namespace App\Repository\Pharmacy;
 

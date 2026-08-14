@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trading Hub{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h1 class="display-4 fw-bold">📊 Trading Hub</h1>
+            <p class="lead text-muted">Your central dashboard for all trading tools and bots.</p>
+        </div>
+    </div>
+
+    <a href="{{ path('app_apps') }}" class="btn btn-secondary" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">← Back to Projects</a>
+
+    <div class="row g-4">
+        {# Alarm Dashboard Card #}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div class="display-1 text-primary mb-3">🚨</div>
+                    <h5 class="card-title fw-bold">Alarm Dashboard</h5>
+                    <p class="card-text text-muted">View real-time market acceleration alerts and signal history.</p>
+                    <a href="{{ path('trading_dashboard') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-1"></i> Open Alarm Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {# Future Bot Card #}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div class="display-1 text-secondary mb-3">🤖</div>
+                    <h5 class="card-title fw-bold">Trading Bot</h5>
+                    <p class="card-text text-muted">Automated trading strategies and execution engine (coming soon).</p>
+                    <button class="btn btn-secondary" disabled>
+                        <i class="fas fa-clock me-1"></i> Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {# Additional Future Tools Card #}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div class="display-1 text-secondary mb-3">📈</div>
+                    <h5 class="card-title fw-bold">Analytics</h5>
+                    <p class="card-text text-muted">Performance metrics and market analysis tools (coming soon).</p>
+                    <button class="btn btn-secondary" disabled>
+                        <i class="fas fa-clock me-1"></i> Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

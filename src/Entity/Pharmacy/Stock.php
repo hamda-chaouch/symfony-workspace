@@ -1,3 +1,4 @@
+<?php
 /*
  * Copyright (c) 2025 Hamda Chaouch.
  *
@@ -15,7 +16,6 @@
  */
 
 
-<?php
 
 namespace App\Entity\Pharmacy;
 
@@ -78,8 +78,8 @@ class Stock
     #[ORM\OneToMany(mappedBy: 'produit', targetEntity: VenteItem::class, orphanRemoval: true)]
     private Collection $venteItems;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $tva_pourcentage = null;
+    //#[ORM\Column(nullable: true)]
+    //private ?float $tva_pourcentage = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $date_expiration = null;
@@ -287,6 +287,7 @@ class Stock
         return $this;
     }
 
+/*
     public function getTvaPourcentage(): ?float
     {
         return $this->tva_pourcentage;
@@ -298,6 +299,7 @@ class Stock
 
         return $this;
     }
+*/
 
     public function getDateExpiration(): ?\DateTime
     {

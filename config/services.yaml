@@ -7,6 +7,23 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    # Trading Bot Configuration:
+
+    # Market data source
+    trading.symbol: '%env(MARKET_SYMBOL)%'
+    trading.market_source: '%env(MARKET_SOURCE)%'
+    trading.timeframe: '%env(MARKET_TIMEFRAME)%'
+
+    # Execution
+    trading.execution_exchange: 'paper'
+
+    # Versions (single source of truth)
+    trading.bot_version: '%env(BOT_VERSION)%'
+    trading.alarm_version: '%env(ALARM_VERSION)%'
+
+    # Health / Monitoring
+    trading.health_timeout: '%env(HEALTH_TIMEOUT_SECONDS)%'
+    trading.min_delta_usdt: '%env(ALARM_MIN_DELTA_USDT)%'
 
 services:
     # default configuration for services in *this* file
@@ -18,6 +35,21 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
-
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Repository\TradingBot\MarketSnapshotRepository:
+        arguments:
+            - '@doctrine.orm.trading_bot_entity_manager'
+
+    App\Repository\TradingBot\AlarmRepository:
+        arguments:
+            - '@doctrine.orm.trading_bot_entity_manager'
+
+    App\Repository\TradingBot\BotStatusRepository:
+        arguments:
+            - '@doctrine.orm.trading_bot_entity_manager'

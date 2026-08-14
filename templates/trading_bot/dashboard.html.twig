@@ -1,0 +1,436 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Market Acceleration Engine{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    {# Header with title, symbol, status badges, and data age #}
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h1 class="h3 mb-0 fw-bold">🚀 Market Acceleration Engine</h1>
+            <p class="text-muted small mb-0">{{ symbol }} Real-Time Monitoring</p>
+        </div>
+        <div>
+            {# Data age badge #}
+            {% if market_data_age is not null %}
+                <span class="badge p-2 me-1
+                    {% if market_data_age < 120 %}bg-success
+                    {% elseif market_data_age < 300 %}bg-warning
+                    {% else %}bg-danger{% endif %}">
+                    <i class="fas fa-heartbeat me-1"></i>
+                    {{ market_data_age }}s
+                </span>
+            {% endif %}
+            {# Bot status badge #}
+            <span class="badge p-2
+                {% if latest_status and latest_status.getStatus() == 'SUCCESS' %}bg-success
+                {% elseif latest_status and latest_status.getStatus() == 'RUNNING' %}bg-warning
+                {% elseif latest_status and latest_status.getStatus() == 'ERROR' %}bg-danger
+                {% else %}bg-secondary{% endif %}">
+                <i class="fas fa-circle me-1" style="font-size:0.6rem;"></i>
+                {% if latest_status %}{{ latest_status.getStatus() }}{% else %}OFFLINE{% endif %}
+            </span>
+            {# Current UTC time #}
+            <span class="badge bg-secondary p-2 ms-1">
+                <i class="far fa-clock me-1"></i>
+                {{ "now"|date("H:i:s") }} 
+            </span>
+        </div>
+    </div>
+
+    <a href="{{ path('trading_hub') }}" class="btn btn-secondary" style="position: fixed; top: 80px; left: 20px; z-index: 1000;">← Back to Home</a>
+
+    {# Card: Last Execution (cron run details) #}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0">
+            <i class="fas fa-history text-primary me-2"></i>
+            <strong>Last Execution</strong>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="text-muted small text-uppercase fw-semibold">Run Time</div>
+                    <h6 class="mb-0">
+                        {% if latest_status %}
+                            {{ latest_status.getTimestamp()|date("Y-m-d H:i:s") }} UTC
+                        {% else %}--{% endif %}
+                    </h6>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-muted small text-uppercase fw-semibold">Duration</div>
+                    <h6 class="mb-0">
+                        {% if latest_status and latest_status.getExecutionTimeMs() is not null %}
+                            {{ latest_status.getExecutionTimeMs() }} ms
+                        {% else %}--{% endif %}
+                    </h6>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-muted small text-uppercase fw-semibold">Result</div>
+                    <h6>
+                        {% if latest_status %}
+                            <span class="badge
+                                {% if latest_status.getStatus() == 'SUCCESS' %}bg-success
+                                {% elseif latest_status.getStatus() == 'RUNNING' %}bg-warning
+                                {% elseif latest_status.getStatus() == 'ERROR' %}bg-danger
+                                {% else %}bg-secondary{% endif %}">
+                                {{ latest_status.getStatus() }}
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary">OFFLINE</span>
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-muted small text-uppercase fw-semibold">Data Age</div>
+                    <h6 class="mb-0">
+                        {% if market_data_age is not null %}
+                            {{ market_data_age }} seconds
+                            <span class="badge ms-1
+                                {% if market_data_age < 120 %}bg-success
+                                {% elseif market_data_age < 300 %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {% if market_data_age < 120 %}Healthy
+                                {% elseif market_data_age < 300 %}Warning
+                                {% else %}Stale{% endif %}
+                            </span>
+                        {% else %}--{% endif %}
+                    </h6>
+                </div>
+            </div>
+
+            {# Show error message if present #}
+            {% if latest_status and latest_status.getErrorMessage() %}
+                <div class="alert alert-danger mt-3 mb-0 py-1 small">
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    {{ latest_status.getErrorMessage() }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Market Delta -->
+    {# Row: Price, Delta, Speed, Latest Signal cards #}
+    <div class="row g-3 mb-4">
+        {# Price card #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase fw-semibold">Price</div>
+                    <h2 class="fw-bold mb-0">
+                        {% if execution_metrics %}
+                            ${{ execution_metrics.price|number_format(2) }}
+                        {% else %}--{% endif %}
+                    </h2>
+                    <small class="text-muted">Last execution</small>
+                </div>
+            </div>
+        </div>
+
+        {# Delta card #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase fw-semibold">Delta ({{ last_run_label }})</div>
+                    <h3 class="fw-bold mb-0
+                        {% if execution_metrics and execution_metrics.delta > 0 %}text-success
+                        {% elseif execution_metrics and execution_metrics.delta < 0 %}text-danger
+                        {% else %}text-secondary{% endif %}">
+                        {% if execution_metrics %}
+                            ${{ execution_metrics.delta|number_format(2) }}
+                            <small class="fs-6">({{ execution_metrics.delta_pct|number_format(2) }}%)</small>
+                        {% else %}--{% endif %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        {# Speed card #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase fw-semibold">Speed (USD/s)</div>
+                    <h2 class="fw-bold mb-0
+                        {% if execution_metrics and execution_metrics.speed > 0 %}text-success
+                        {% elseif execution_metrics and execution_metrics.speed < 0 %}text-danger
+                        {% else %}text-secondary{% endif %}">
+                        {% if execution_metrics %}{{ execution_metrics.speed|number_format(2) }}{% else %}--{% endif %}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        {# Latest Signal card #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase fw-semibold">Latest Signal</div>
+                    {% if signal_metrics %}
+                        <div>
+                            <h2 class="fw-bold mb-0
+                                {% if signal_metrics.direction == 'LONG' %}text-success
+                                {% elseif signal_metrics.direction == 'SHORT' %}text-danger
+                                {% else %}text-secondary{% endif %}">
+                                {% if signal_metrics.direction == 'LONG' %}<i class="fas fa-arrow-up me-1"></i>
+                                {% elseif signal_metrics.direction == 'SHORT' %}<i class="fas fa-arrow-down me-1"></i>{% endif %}
+                                {{ signal_metrics.direction }}
+                            </h2>
+                            <div class="d-flex gap-2 mt-1">
+                                <span class="badge bg-success">{{ signal_metrics.strength }}%</span>
+                                {% if signal_metrics.entry_confidence is not null %}
+                                    <span class="badge bg-secondary">C: {{ signal_metrics.entry_confidence }}%</span>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">
+                                {{ signal_metrics.created_at|date("H:i:s", "UTC") }}
+                                (valid for {{ signal_metrics.validity_minutes }} min)
+                            </small>
+                            {% if signal_metrics.alarm_type %}
+                                <div class="mt-1"><span class="badge bg-info">{{ signal_metrics.alarm_type }}</span></div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <h2 class="fw-bold mb-0 text-secondary"><i class="fas fa-minus me-1"></i> NEUTRAL</h2>
+                        <small class="text-muted">No recent signal</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Card: Alarm History table #}
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-bell text-primary me-2"></i>
+                <strong>Alarm History</strong>
+                <span class="badge bg-secondary ms-2">{{ alarms|length }}</span>
+            </div>
+            <div>
+
+                {# Refresh button (manual update) #}
+                <button id="refresh-btn" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-sync me-1"></i> Refresh Alarm History
+                </button>
+                <span id="last-updated" class="text-muted small ms-2">Last loaded: now</span>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Time</th>
+                            <th>Symbol</th>
+                            <th>Signal</th>
+                            <th>Type</th>
+                            <th>TF</th>
+                            <th>Price</th>
+                            <th>Δ% (5m)</th>
+                            <th>Speed (5m)</th>
+                            <th>Strength</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alarm-body">
+
+                    {# Loop through alarms if any, else show empty message #}
+                    {% if alarms is not empty %}
+                        {% for alarm in alarms %}
+                            <tr>
+                                <td>{{ alarm.getCreatedAt()|date("H:i:s", "UTC") }}</td>
+                                <td>{{ alarm.getSymbol() }}</td>
+                                <td>
+                                    <span class="badge
+                                        {% if alarm.getDirection() == 'LONG' %}bg-success
+                                        {% elseif alarm.getDirection() == 'SHORT' %}bg-danger
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ alarm.getDirection() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if alarm.getAlarmType() %}
+                                        <span class="badge bg-info">{{ alarm.getAlarmType() }}</span>
+                                    {% else %}--{% endif %}
+                                </td>
+                                <td>
+                                    {% if alarm.getTimeframeUsed() %}
+                                        <span class="badge bg-dark">{{ alarm.getTimeframeUsed() }}</span>
+                                    {% else %}--{% endif %}
+                                </td>
+                                <td>${{ alarm.getPriceNow()|number_format(2) }}</td>
+                                <td class="
+                                    {% if alarm.getDeltaPct() > 0 %}text-success
+                                    {% elseif alarm.getDeltaPct() < 0 %}text-danger
+                                    {% else %}text-secondary{% endif %}">
+                                    {{ alarm.getDeltaPct()|number_format(2) }}%
+                                </td>
+                                <td>{{ alarm.getSpeed5m()|number_format(2) }}</td>
+                                <td>
+                                    <div class="progress" style="width:60px;height:6px;">
+                                        <div class="progress-bar
+                                            {% if alarm.getStrength() >= 70 %}bg-success
+                                            {% elseif alarm.getStrength() >= 40 %}bg-warning
+                                            {% else %}bg-secondary{% endif %}"
+                                            style="width:{{ alarm.getStrength() }}%;">
+                                        </div>
+                                    </div>
+                                    <small>{{ alarm.getStrength() }}%</small>
+                                </td>
+                                <td>
+                                    {% if alarm.getEntryConfidence() is not null %}
+                                        {{ alarm.getEntryConfidence() }}%
+                                    {% else %}--{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="10" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox me-2"></i> No alarms triggered yet.
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# JavaScript for refreshing the alarm table #}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const refreshBtn = document.getElementById('refresh-btn');
+    const alarmBody = document.getElementById('alarm-body');
+    const lastUpdated = document.getElementById('last-updated');
+
+    function updateTimestamp() {
+        lastUpdated.textContent = "Last loaded: " + new Date().toLocaleTimeString();
+    }
+
+    // Create a table row from alarm data using DOM methods (safe).
+    function createAlarmRow(alarm) {
+        const tr = document.createElement('tr');
+
+        // Time
+        const tdTime = document.createElement('td');
+        tdTime.textContent = alarm.created_at ? alarm.created_at.split(' ')[1] : '--';
+        tr.appendChild(tdTime);
+
+        // Symbol
+        const tdSymbol = document.createElement('td');
+        tdSymbol.textContent = alarm.symbol;
+        tr.appendChild(tdSymbol);
+
+        // Signal (badge)
+        const tdSignal = document.createElement('td');
+        const signalBadge = document.createElement('span');
+        signalBadge.className = 'badge ' + (alarm.direction === 'LONG' ? 'bg-success' : alarm.direction === 'SHORT' ? 'bg-danger' : 'bg-secondary');
+        signalBadge.textContent = alarm.direction;
+        tdSignal.appendChild(signalBadge);
+        tr.appendChild(tdSignal);
+
+        // Alarm Type
+        const tdType = document.createElement('td');
+        if (alarm.alarm_type) {
+            const typeBadge = document.createElement('span');
+            typeBadge.className = 'badge bg-info';
+            typeBadge.textContent = alarm.alarm_type;
+            tdType.appendChild(typeBadge);
+        } else {
+            tdType.textContent = '--';
+        }
+        tr.appendChild(tdType);
+
+        // Timeframe Used
+        const tdTf = document.createElement('td');
+        if (alarm.timeframe_used) {
+            const tfBadge = document.createElement('span');
+            tfBadge.className = 'badge bg-dark';
+            tfBadge.textContent = alarm.timeframe_used;
+            tdTf.appendChild(tfBadge);
+        } else {
+            tdTf.textContent = '--';
+        }
+        tr.appendChild(tdTf);
+
+        // Price
+        const tdPrice = document.createElement('td');
+        tdPrice.textContent = '$' + Number(alarm.price_now).toFixed(2);
+        tr.appendChild(tdPrice);
+
+        // Delta %
+        const tdDelta = document.createElement('td');
+        tdDelta.className = alarm.delta_pct > 0 ? 'text-success' : alarm.delta_pct < 0 ? 'text-danger' : 'text-secondary';
+        tdDelta.textContent = Number(alarm.delta_pct).toFixed(2) + '%';
+        tr.appendChild(tdDelta);
+
+        // Speed
+        const tdSpeed = document.createElement('td');
+        tdSpeed.textContent = Number(alarm.speed_5m).toFixed(2);
+        tr.appendChild(tdSpeed);
+
+        // Strength (with progress bar)
+        const tdStrength = document.createElement('td');
+        const progressDiv = document.createElement('div');
+        progressDiv.className = 'progress';
+        progressDiv.style.cssText = 'width:60px;height:6px;';
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar ' + (alarm.strength >= 70 ? 'bg-success' : alarm.strength >= 40 ? 'bg-warning' : 'bg-secondary');
+        progressBar.style.width = alarm.strength + '%';
+        progressDiv.appendChild(progressBar);
+        tdStrength.appendChild(progressDiv);
+        const strengthSmall = document.createElement('small');
+        strengthSmall.textContent = alarm.strength + '%';
+        tdStrength.appendChild(strengthSmall);
+        tr.appendChild(tdStrength);
+
+        // Confidence
+        const tdConfidence = document.createElement('td');
+        tdConfidence.textContent = alarm.entry_confidence !== null && alarm.entry_confidence !== undefined
+            ? alarm.entry_confidence + '%'
+            : '--';
+        tr.appendChild(tdConfidence);
+
+        return tr;
+    }
+
+    function loadAlarms() {
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Loading...';
+
+        // Use absolute path to avoid routing issues in JavaScript
+        const url = '/trading/alarms/latest';
+
+        //fetch('{{ path("trading_alarms_latest") }}')
+        fetch(url)
+            .then(response => {
+                   if (!response.ok){
+                       throw new Error("HTTP error " + response.status);
+                   }
+                   return response.json();
+             })
+            .then(data => {
+                const fragment = document.createDocumentFragment();
+                data.forEach(alarm => {
+                    fragment.appendChild(createAlarmRow(alarm));
+                });
+                alarmBody.innerHTML = '';
+                alarmBody.appendChild(fragment);
+                updateTimestamp();
+            })
+            .catch(error => {
+                console.error("Alarm loading error:", error);
+                alert("Failed to load alarms. Please try again later.");
+            })
+            .finally(() => {
+                refreshBtn.disabled = false;
+                refreshBtn.innerHTML = '<i class="fas fa-sync me-1"></i> Refresh Alarm History';
+            });
+    }
+
+    refreshBtn.addEventListener('click', loadAlarms);
+    updateTimestamp();
+});
+</script>
+{% endblock %}

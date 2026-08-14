@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}VR/XR Studio | Development Engineering{% endblock %}
+
+{% block body %}
+<div class="container">
+    <a href="{{ path('app_apps') }}" class="btn btn-secondary mb-4">← Back to Projects</a>
+
+    <div class="text-center mb-5">
+        <span style="font-size: 5rem;">🥽</span>
+        <h1>VR/XR Studio</h1>
+        <p class="lead">Immersive experiences, custom accessories, and full‑body VR.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">🎮 VR Accessories</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+						    <i class="fas fa-shoe-prints text-primary me-2"></i>
+                            <strong>🦶 Foot Tracking Belt</strong>
+                            <p class="small text-muted">Belt with Step detection to replace joystick movement. Full foot detection for 100% immersion.</p>
+							<span class="badge bg-warning mb-2">PROTOTYPE</span>
+                        </li>
+                        <li class="mb-3">
+						    <i class="fas fa-microchip text-primary me-2"></i>
+                            <strong>🧠 NLP Controller</strong>
+                            <p class="small text-muted">Natural Language Processing to replace traditional VR controllers (combined with steps detection Belt).</p>
+							<span class="badge bg-info mb-2">RESEARCH</span>
+                        </li>
+                        <li class="mb-3">
+						    <i class="fas fa-running text-primary me-2"></i>
+                            <strong>🏃 Omni‑Directional Treadmill</strong>
+                            <p class="small text-muted">VR treadmill solution integrated with the Foot Tracking Belt for complete locomotion freedom.</p>
+							<span class="badge bg-warning mb-2">PROTOTYPE</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">🎯 VR Apps</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+						    <i class="fas fa-spa text-primary me-2"></i>
+                            <strong>🧘 VR Meditation</strong>
+                            <p class="small text-muted">Immersive relaxation and mindfulness experiences in Virtual Reality.</p>
+                        </li>
+                        <li class="mb-3">
+						    <i class="fas fa-monkey text-primary me-2"></i>
+                            <strong>🦍 Gorilla – A New Journey</strong>
+                            <p class="small text-muted">Adventure mode version of Gorilla Tag – climb, run, and explore in VR.</p>
+                        </li>
+                        <li class="mb-3">
+						    <i class="fas fa-fist-raised text-primary me-2"></i>
+                            <strong>⚔️ VR Combat Arena</strong>
+                            <p class="small text-muted">Full‑body combat VR app. Combined with foot tracking for 100% immersion.</p>
+                        </li>
+                        <li class="mb-3">
+						    <i class="fas fa-futbol text-primary me-2"></i>
+                            <strong>⚽ VR Football</strong>
+                            <p class="small text-muted">Realistic football with foot tracking for kicking and movement.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_apps') }}" class="btn btn-primary">View All Projects</a>
+    </div>
+</div>
+
+    <!-- Contact + Socials (gray background) -->
+    <section id="contact">
+        <div class="contact-socials py-4 bg-secondary text-white mt-5">
+        {#    <div class="container"> #}
+                <div class="row mx-3">
+                    <div class="col-12 col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        <h5>Contact</h5>
+                        <address class="mb-0">
+                            <strong>Development Engineering</strong><br>
+                            Street Abdelkader M'hallah, Complex "EL HAJJAR" GF, Monastir, Tunisia<br>
+                            <i class="fas fa-phone-alt me-1"></i> +216 98 411 682{# / +216 73 477 211#}<br>
+                            <i class="fas fa-envelope me-1"></i> development.engineering.s@gmail.com
+                        </address>
+                    </div>
+                    <div class="col-12 col-md-6 text-center text-md-end">
+                        <h5>Follow us</h5>
+                        <div class="social-icons">
+                            <a href="https://github.com/hamda-chaouch" target="_blank" class="text-white me-3"><i class="fab fa-github fa-2x"></i></a>
+                            <a href="https://linkedin.com/in/hamda-chaouch" target="_blank" class="text-white me-3"><i class="fab fa-linkedin fa-2x"></i></a>
+                            <a href="https://twitter.com/hamda_chaouch" target="_blank" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                            <!-- new Reddit links -->
+                            {# <a href="https://www.reddit.com/user/hamda-chaouch/" target="_blank" class="text-white me-3" title="Reddit Profile"><i class="fab fa-reddit fa-2x"></i></a> #}
+                            <a href="https://www.reddit.com/r/VR_Engineering_Lab/" target="_blank" class="text-white me-3" title="VR Engineering Lab Subreddit"><i class="fab fa-reddit-alien fa-2x"></i></a>
+                            <a href="https://discord.gg/MQM2ZQZHkZ" target="_blank" class="text-white me-3"><i class="fab fa-discord fa-2x"></i></a>
+                            <a href="https://youtube.com/@dev-labo" target="_blank" class="text-white me-3"><i class="fab fa-youtube fa-2x"></i></a>
+                            <a href="https://youtube.com/@vr-studioo" target="_blank" class="text-white me-3"><i class="fab fa-youtube fa-2x"></i></a>
+                            <a href="https://t.me/hamda_chaouch" target="_blank" class="text-white me-3"><i class="fab fa-telegram fa-2x"></i></a>
+                            <a href="mailto:development.engineering.s@gmail.com" class="text-white"><i class="fas fa-envelope fa-2x"></i></a>
+
+                        </div>
+                    </div>
+                </div>
+         {#  </div> #}
+        </div>
+    </section>
+
+<style>
+        body {
+            background-image: url('/images/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    .container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+    }
+    .card {
+        transition: transform 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}

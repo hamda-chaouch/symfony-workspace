@@ -60,8 +60,8 @@
             <div class="col-md-6">{{ form_row(form.prix_detail) }}</div>
         </div>
         <div class="row">
-           <div class="col-md-6">{{ form_row(form.tva_pourcentage, {'label_attr': {'class': 'form-label'}}) }}</div>
-           <div class="col-md-6">{{ form_row(form.prix_ttc) }}</div>
+           {# <div class="col-md-6">{{ form_row(form.tva_pourcentage, {'label_attr': {'class': 'form-label'}}) }}</div>#}
+           {#<div class="col-md-6">{{ form_row(form.prix_ttc) }}</div>#}
         </div>
     </div>
 
@@ -90,19 +90,16 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Get the fields using the exact name (fallback to ID)
-        const prixHt = document.querySelector('[name="{{ form.prix_achat.vars.full_name }}"]') ||
+        const prixTTC = document.querySelector('[name="{{ form.prix_achat.vars.full_name }}"]') ||
                        document.getElementById('{{ form.prix_achat.vars.id }}');
-        const tva = document.querySelector('[name="{{ form.tva_pourcentage.vars.full_name }}"]') ||
-                    document.getElementById('{{ form.tva_pourcentage.vars.id }}');
-        const prixTtc = document.querySelector('[name="{{ form.prix_ttc.vars.full_name }}"]') ||
-                        document.getElementById('{{ form.prix_ttc.vars.id }}');
+                     
         const marge = document.querySelector('[name="{{ form.marge.vars.full_name }}"]') ||
-                        document.getElementById('{{ form.marge.vars.id }}');
+                        document.getElementById('{{ form.marge.vars.id }}'); 
         const prixDetail = document.querySelector('[name="{{ form.prix_detail.vars.full_name }}"]') ||
                         document.getElementById('{{ form.prix_detail.vars.id }}');
 
         // If elements not found, abort
-        if (!prixHt || !tva || !prixTtc || !marge || !prixDetail) {
+        if (!prixTTC || !prixDetail || !marge) { //|| !tva || !prixVenteTtc) {
             console.warn('TTC calculation elements not found');
             return;
         }
@@ -113,20 +110,32 @@
             return parseFloat(value.replace(',', '.')) || 0;
         }
 
+        // On lit les valeurs existantes du produit
+        const ttcExisting = normalizeDecimal(prixTTC.value);
+        const detailExisting = normalizeDecimal(prixDetail.value);
+        //const vente = normalizeDecimal(prixDetail.value);
+        if (ttcExisting > 0 && detailExisting > 0){ // && vente > 0) {
+            // Calcul du pourcentage de marge actuel
+            const margePercent = ((detailExisting / ttcExisting) - 1) * 100;
+            // On injecte la valeur dans le champ "marge" (sans écraser la référence DOM)
+            marge.value = margePercent.toFixed(2);
+        }
+
         function updateTtc() {
-            let ht = normalizeDecimal(prixHt.value);
-            let rate = normalizeDecimal(tva.value);
-            let margeV = normalizeDecimal(marge.value);
-            prixDetail.value = ht + margeV;
-            let prixDetailV = normalizeDecimal(prixDetail.value);
-            let ttc = prixDetailV * (1 + rate / 100);
-            prixTtc.value = ttc.toFixed(2);
+            const ttc = normalizeDecimal(prixTTC.value);
+            //const rate = normalizeDecimal(tva.value);
+            const margeV = normalizeDecimal(marge.value);
+            const calculatedDetail = ttc * (1 + (margeV / 100));
+            prixDetail.value = calculatedDetail.toFixed(2);
+            const prixDetailV = normalizeDecimal(prixDetail.value);
+            //const ttc = prixDetailV * (1 + rate / 100);
+            //prixTtc.value = ttc.toFixed(2);
         }
 
         // Attach event listeners
-        prixHt.addEventListener('input', updateTtc);
+        prixTTC.addEventListener('input', updateTtc);
         marge.addEventListener('input', updateTtc);
-        tva.addEventListener('input', updateTtc);
+        //tva.addEventListener('input', updateTtc);
         
         // Run once to set initial value (for existing products)
         updateTtc();

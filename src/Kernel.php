@@ -1,3 +1,4 @@
+<?php
 /*
  * Copyright (c) 2025 Hamda Chaouch.
  *
@@ -13,9 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-<?php
 
 namespace App;
 

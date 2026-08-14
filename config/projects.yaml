@@ -1,18 +1,53 @@
 projects:
   - name: "🤖💹 Trading Bot Dashboard"
-    path: "/binance"
+    path: "/trading"
     icon: "fab fa-bitcoin"
-    description: "Automated crypto trading with Telegram alerts."
+    description: "Automated crypto trading with Telegram alerts and real-time monitoring."
+    category: "finance"
+
   - name: "🏥 Parapharmacy Manager"
     path: "/pharmacy"
     icon: "fas fa-store"
-    description: "Inventory, sales, suppliers, and purchase orders."
+    description: "Inventory, sales, suppliers, and purchase orders management."
+    category: "pharmacy"
+
   - name: "🛒 I Buy E‑commerce"
     path: "/ibuy"
     icon: "fas fa-shopping-cart"
-    description: "Online marketplace with cart and payments."
-  - name: "🗄️  My DataBases"
+    description: "Online marketplace with cart and payments (coming soon)."
+    category: "ecommerce"
+
+  - name: "🗄️ My DataBases"
     path: "/db"
-    icon: "fas fa-mobile-alt"
-    description: "Manage my MariaDB DataBases."
-    external: true
+    icon: "fas fa-database"
+    description: "Manage my MariaDB databases."
+#    external: true
+    category: "database"
+
+  # ============================================================
+  # 🥽 VR/XR STUDIO – Immersive Experiences & Hardware
+  # ============================================================
+
+  - name: "🥽 VR/XR Studio"
+    path: "/vr-studio"
+    icon: "fas fa-vr-cardboard"
+    description: "Full‑body VR character design, immersive apps, and custom accessories."
+    category: "vr"
+
+
+  # ============================================================
+  # 🤖 ROBOTICS & AUTOMATION
+  # ============================================================
+
+  - name: "🤖 Robot Waiter"
+    path: "/robot-waiter"
+    icon: "fas fa-robot"
+    description: "Autonomous robot waiter for coffee shops and restaurants."
+    category: "robotics"
+    status: "prototype"
+
+  - name: "📱 Self‑Service Tablet System"
+    path: "/self-service"
+    icon: "fas fa-tablet-alt"
+    description: "Android app on customer tablets for ordering and payment at restaurants."
+    category: "robotics"

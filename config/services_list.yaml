@@ -1,0 +1,60 @@
+services:
+  - name: "⚙️ Mechatronics Engineering"
+    icon: "fas fa-microchip"
+    description: "Custom mechatronic system design combining mechanical, electronic, and software engineering."
+    features:
+      - "PCB design & prototyping"
+      - "Motor control & actuation"
+      - "IoT device development"
+      - "Real‑time systems"
+      - "3D printing & CNC integration"
+
+  - name: "🤖 Robotics & Automation"
+    icon: "fas fa-robot"
+    description: "Design and integration of robotic systems for hospitality, retail, and industrial applications."
+    features:
+      - "Robot waiter / service robots"
+      - "Android self‑service tablet apps"
+      - "Embedded systems (PIC, AVR, ARM, STM32)"
+      - "Raspberry Pi & Arduino solutions"
+      - "Sensor fusion & motion control"
+
+  - name: "🥽 VR / XR Experiences"
+    icon: "fas fa-vr-cardboard"
+    description: "Immersive virtual reality applications and accessories for Meta Quest, Unity 3D, and more."
+    features:
+      - "Full‑body character design"
+      - "VR game development (Unity 3D)"
+      - "Custom VR accessories (foot trackers, controllers)"
+      - "NLP integration for hands‑free control"
+      - "Omnidirectional treadmill integration"
+
+  - name: "🌐 Web Development"
+    icon: "fas fa-code"
+    description: "Custom web applications, e‑commerce platforms, and business automation solutions."
+    features:
+      - "Symfony / PHP 8.2"
+      - "JavaScript / Stimulus / Turbo"
+      - "API Development (REST)"
+      - "Database Design (MariaDB/MySQL)"
+      - "Cloud Deployment (GCP, AWS)"
+
+  - name: "📱 Mobile App Development"
+    icon: "fas fa-mobile-alt"
+    description: "Cross‑platform mobile applications with seamless backend integration."
+    features:
+      - "Android native (Java/Kotlin)"
+      - "iOS (Swift)"
+      - "Flutter / React Native"
+      - "Backend APIs (Symfony / Node.js)"
+      - "Cloud sync & push notifications"
+
+  - name: "🔧 Consulting & Training"
+    icon: "fas fa-chalkboard-teacher"
+    description: "Technical consulting, system architecture, and hands‑on training for your engineering teams."
+    features:
+      - "Architecture reviews"
+      - "Technology stack recommendations"
+      - "Workshops in Symfony, VR, Robotics"
+      - "Rapid prototyping"
+      - "Project management"

@@ -1,3 +1,4 @@
+<?php
 /*
  * Copyright (c) 2025 Hamda Chaouch.
  *
@@ -14,9 +15,6 @@
  * limitations under the License.
  */
 
-
-<?php
-
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,6 +28,14 @@ final class AppsController extends AbstractController
     public function index(): Response
     {
         $projects = Yaml::parseFile(__DIR__.'/../../config/projects.yaml')['projects'];
+
+	// Ensure each project has a 'category' key
+	foreach ($projects as &$project) {
+   		 if (!isset($project['category'])) {
+        		$project['category'] = 'other';
+    		}
+	}
+
         return $this->render('apps/index.html.twig', [
             'projects' => $projects,
         ]);

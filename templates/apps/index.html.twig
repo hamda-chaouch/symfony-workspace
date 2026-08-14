@@ -1,41 +1,83 @@
-{# templates/home/index.html.twig #}
+{# templates/apps/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Project Hub | DevEngineerings{% endblock %}
+{% block title %}Project Hub | Development Engineering{% endblock %}
 
 {% block body %}
-{# At the top, inside the container #}
+<a href="{{ path('home') }}" class="btn btn-secondary" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">← Back to Home</a>
 
-    <a href="{{ path('home') }}" class="btn btn-secondary" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">← Back to Home</a>
+<div class="container">
+    <h1>Welcome to Development Engineering</h1>
+    <p>Select a project to manage or explore:</p>
 
-    <div class="container">
-        <h1>Welcome to Development Engineering</h1>
-        <p>Select a project to manage:</p>
+    {# Group projects by category #}
+    {% set categories = {
+        '': 'All Projects',
+        'vr': '🥽 VR/XR Studio',
+        'robotics': '🤖 Robotics & Automation'
+    } %}
 
-        <div class="projects">
-           {# <div class="row"> #}
-                {% for project in projects %}
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                {# % if project.icon %}
-                                    <i class="{{ project.icon }} fa-2x mb-2 text-primary"></i>
-                                {% endif % #}
-                                <h5 class="card-title">{{ project.name }}</h5>
-                                <p class="card-text">{{ project.description }}</p>
-                                <a href="{{ project.path }}" class="btn btn-outline-primary" {% if project.external is defined and project.external %}target="_blank"{% endif %}>
-                                    Learn more
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {# </div> #}
+    {# Default: show all if no category filter #}
+    {% set activeCategory = app.request.query.get('category', '') %}
 
-        </div>
+    <div class="category-filters mb-4">
+        <a href="{{ path('app_apps') }}" class="btn {{ activeCategory == '' ? 'btn-primary' : 'btn-outline-secondary' }}">All Projects</a>
+        <a href="{{ path('app_apps', {category: 'vr'}) }}" class="btn {{ activeCategory == 'vr' ? 'btn-primary' : 'btn-outline-secondary' }}">🥽 VR/XR Studio</a>
+        <a href="{{ path('app_apps', {category: 'robotics'}) }}" class="btn {{ activeCategory == 'robotics' ? 'btn-primary' : 'btn-outline-secondary' }}">🤖 Robotics & Automation</a>
     </div>
 
-    <style>
+    {% set filteredProjects = projects|filter(p => activeCategory == '' or (p.category|default('') == activeCategory)) %}
+
+    <div class="row">
+        {% for project in filteredProjects %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if project.icon %}
+                                <i class="{{ project.icon }} text-primary me-2"></i>
+                            {% endif %}
+                            {{ project.name }}
+                        </h5>
+                        <p class="card-text">{{ project.description }}</p>
+
+                        {# Status badge #}
+                        {% if project.status is defined %}
+                            <span class="badge 
+                                {% if project.status == 'prototype' %}bg-warning
+                                {% elseif project.status == 'research' %}bg-info
+                                {% elseif project.status == 'production' %}bg-success
+                                {% else %}bg-secondary{% endif %} 
+                                mb-2">
+                                {{ project.status|capitalize }}
+                            </span>
+                        {% endif %}
+
+                        <a href="{{ project.path }}" class="btn btn-outline-primary" 
+                           {% if project.external is defined and project.external %}target="_blank"{% endif %}>
+                            Learn more
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <p class="text-muted">No projects found in this category.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-5 p-4 bg-light rounded">
+        <h3>🚀 Future Projects</h3>
+        <ul class="list-unstyled">
+            <li>🔬 Full‑body VR character project (foundation for all VR apps)</li>
+            <li>📚 More VR experiences</li>
+            <li>🤖 Advanced robotics integration</li>
+        </ul>
+    </div>
+</div>
+
+<style>
         body {
             background-image: url('/images/background.jpg');
             background-size: cover;
@@ -45,52 +87,26 @@
             margin: 0;
             padding: 0;
         }
-        .container {
-            max-width: 1200px;
-            margin: 50px auto;
-            padding: 20px;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.85);
-            border-radius: 20px;
-        }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        .projects {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 40px;
-        }
-        .project-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 30px 20px;
-            width: 260px;
-            text-decoration: none;
-            color: #333;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-        }
-        .icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .project-card h2 {
-            margin: 10px 0;
-            font-size: 1.5rem;
-        }
-        .project-card p {
-            color: #666;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-    </style>
+    .container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 20px;
+        min-height: 80vh;
+    }
+    .category-filters .btn {
+        margin: 0 5px;
+        border-radius: 30px;
+        padding: 8px 24px;
+    }
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+</style>
 {% endblock %}
