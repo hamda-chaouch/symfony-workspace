@@ -137,7 +137,7 @@
                         {% else %}text-secondary{% endif %}">
                         {% if execution_metrics %}
                             ${{ execution_metrics.delta|number_format(2) }}
-                            <small class="fs-6">({{ execution_metrics.delta_pct|number_format(2) }}%)</small>
+                            <small class="fs-6">(+{{ execution_metrics.delta_pct|number_format(2) }}%)</small>
                         {% else %}--{% endif %}
                     </h3>
                 </div>
@@ -211,6 +211,9 @@
                 <button id="refresh-btn" class="btn btn-sm btn-outline-primary">
                     <i class="fas fa-sync me-1"></i> Refresh Alarm History
                 </button>
+                <a href="{{ telegram_channel_link }}" target="_blank" class="btn btn-sm btn-outline-info ms-2">
+                    <i class="fab fa-telegram me-1"></i> Join our Telegram Channel for Notifications
+                </a>
                 <span id="last-updated" class="text-muted small ms-2">Last loaded: now</span>
             </div>
         </div>

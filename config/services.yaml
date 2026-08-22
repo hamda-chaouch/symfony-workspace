@@ -22,8 +22,11 @@ parameters:
     trading.alarm_version: '%env(ALARM_VERSION)%'
 
     # Health / Monitoring
-    trading.health_timeout: '%env(HEALTH_TIMEOUT_SECONDS)%'
-    trading.min_delta_usdt: '%env(ALARM_MIN_DELTA_USDT)%'
+    trading.health_timeout: '%env(int:HEALTH_TIMEOUT_SECONDS)%'
+    trading.min_delta_usdt: '%env(float:ALARM_MIN_DELTA_USDT)%'
+    #we add int and float (explicit typing) otherwise Symfony loads them as strings.
+
+    telegram.channel_link: '%env(TELEGRAM_CHANNEL_LINK)%'
 
 services:
     # default configuration for services in *this* file

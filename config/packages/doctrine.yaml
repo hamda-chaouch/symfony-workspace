@@ -15,7 +15,8 @@ doctrine:
                 profiling_collect_backtrace: '%kernel.debug%'
                 use_savepoints: true
             trading_bot:
-                url: 'sqlite:///%kernel.project_dir%/../trading_bot/database/trading_bot.db'
+                #url: 'sqlite:///%kernel.project_dir%/../trading_bot/database/trading_bot.db'
+                url: '%env(resolve:TRADING_DATABASE_URL)%'
                 # Middleware is registered via #[AsMiddleware] attribute
 
     orm:

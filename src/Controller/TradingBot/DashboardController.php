@@ -17,12 +17,14 @@ class DashboardController extends AbstractController
 {
     private string $symbol;
     private int $healthTimeout;
+    private string $telegramChannelLink;
 
     // Constructor injects parameters from services.yaml.
     public function __construct(ParameterBagInterface $params)
     {
         $this->symbol = (string) $params->get('trading.symbol');
         $this->healthTimeout = (int) $params->get('trading.health_timeout');
+        $this->telegramChannelLink = (string) $params->get('telegram.channel_link');
     }
 
     // Main dashboard page.
@@ -62,7 +64,11 @@ class DashboardController extends AbstractController
 
         $signalMetrics = null;
         if ($latestAlarm) {
-            $minutesSinceAlarm = (time() - $latestAlarm->getCreatedAt()->getTimestamp()) / 60;
+            //$minutesSinceAlarm = (time() - $latestAlarm->getCreatedAt()->getTimestamp()) / 60;
+            $minutesSinceAlarm = max(
+                0,
+               (time() - $latestAlarm->getCreatedAt()->getTimestamp()) / 60
+            );
 
             $strength = $latestAlarm->getStrength();
             // Validity depends on strength: stronger signals last longer.
@@ -121,6 +127,7 @@ class DashboardController extends AbstractController
             'alarms' => $alarms,
             'last_run_label' => $lastRunLabel,
             'market_data_age' => $marketDataAge,
+            'telegram_channel_link' => $this->telegramChannelLink,
         ]);
     }
 
