@@ -82,99 +82,122 @@
     </section>
 
     <!-- Projects Preview -->
+<!-- ============================================================
+     FEATURED FLAGSHIP PROJECTS – Modern High-Tech Design
+     ============================================================ -->
+<section class="flagship-section">
+    <div class="container">
 
-<!-- VR/XR Studio Section -->
-<section>
-        <div id="portfolio" class="container">
-            <h2 class="text-center mb-4">Featured Projects</h2>
-
-	    <div class="container" id="vr-studio">
-     	         <h4 class="text-center mb-4">🥽 VR/XR Studio</h4>
-       		 <div class="row">
-                      <div class="col-lg-6 mb-4 mb-lg-0">
-                          <div class="card h-100 shadow-sm">
-                               <div class="card-body text-center">
-                                    <span style="font-size: 4rem; display: block; margin-bottom: 1rem;">🎮</span>
-                                    <h4>VR Accessories Design</h4>
-                                    <p class="card-text">Custom VR accessories: foot tracking belt, NLP controller, omnidirectional treadmill.</p>
-                               </div>
-                          </div>
-                      </div>
-                      <div class="col-lg-6">
-                           <div class="card h-100 shadow-sm">
-                              <div class="card-body text-center">
-                              <span style="font-size: 4rem; display: block; margin-bottom: 1rem;">🎯</span>
-                              <h4>VR App Development</h4>
-                              <p class="card-text">Full‑body character design, combat, football, meditation, and adventure games.</p>
-                           </div>
-                      </div>
-                  </div>
-             </div>
-           <div class="text-center mt-4">
-                 <a href="{{ path('app_apps', {category: 'vr'}) }}" class="btn btn-primary">
-                     Explore VR/XR Projects
-                 </a>
-           </div>
-
-          <!-- Robotics & Automation Section -->
-         <div class="container mt-5" id="robotics">
-            <h4 class="text-center mb-4">🤖 Robotics & Automation</h4>
-            <div class="row justify-content-center">
-              <div class="col-md-4 mb-3">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🤖</span>
-                        <h5>Robot Waiter</h5>
-                        <p class="card-text small">Autonomous robot for coffee shops and restaurants.</p>
-                    </div>
-                </div>
-              </div>
-              <div class="col-md-4 mb-3">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">📱</span>
-                        <h5>Self-Service Tablets</h5>
-                        <p class="card-text small">Android app on customer tablets for ordering and payments.</p>
-                    </div>
-                </div>
-              </div>
-
-              <div class="col-md-4 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">🤖  Binance Trading Bot</h5>
-                            <p class="card-text">Automated cryptocurrency trading with Telegram alerts and real-time monitoring.</p>
-                            <a href="/binance" class="btn btn-outline-primary">Learn more</a>
-                        </div>
-                    </div>
-              </div>
-
-            </div>
-            <div class="text-center mt-3">
-              <a href="{{ path('app_apps', {category: 'robotics'}) }}" class="btn btn-primary">
-                View Robotics Projects
-              </a>
-            </div>
+        <div class="flagship-title">
+            <span>⭐ Featured Flagship Projects</span>
         </div>
 
-        <div class="container mt-5">
-           <h4 class="text-center mb-4">🛒  E-Commerce</h4>
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">🛒 I Buy E‑commerce</h5>
-                            <p class="card-text">Online marketplace with cart and payments.</p>
-                            <a href="/pharmacy" class="btn btn-outline-primary">Learn more</a>
-                        </div>
+        <div class="flagship-grid">
+
+            <!-- ---------------------------------------------------
+                 FLAGSHIP 1: BTCUSDT Realtime Alarm (LIVE)
+                 --------------------------------------------------- -->
+            <div class="flagship-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flagship-icon" style="background: linear-gradient(135deg, #f7931a, #f59e0b);">
+                        <i class="fab fa-bitcoin"></i>
+                    </div>
+                    <span class="status-badge status-live">
+                        <span class="live-dot"></span> Live in production
+                    </span>
+                </div>
+
+                <h3>BTCUSDT Realtime Alarm</h3>
+                <p class="flagship-tagline">Live crypto price monitoring with instant alerts</p>
+                <p class="description">
+                    Real-time monitoring of the BTC/USDT pair on Binance with customizable price thresholds.
+                    Sends instant alerts via Telegram when conditions are met. Fully operational in production.
+                </p>
+
+                <div class="tech-chips">
+                    <span class="tech-chip">Symfony</span>
+                    <span class="tech-chip">WebSocket</span>
+                    <span class="tech-chip">Binance API</span>
+                    <span class="tech-chip">Telegram Bot</span>
+                    <span class="tech-chip">MariaDB</span>
+                </div>
+
+                <div class="project-card-footer">
+                    <span class="revenue-badge">
+                        <i class="fas fa-handshake"></i> Revenue-share available
+                    </span>
+                </div>
+            </div>
+
+            <!-- ---------------------------------------------------
+                 FLAGSHIP 2: AI Factory Hub (IN DEVELOPMENT)
+                 --------------------------------------------------- -->
+            <div class="flagship-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flagship-icon" style="background: linear-gradient(135deg, #7c3aed, #ec4899);">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <span class="status-badge status-in-development">
+                        <span class="live-dot" style="background:#f59e0b;box-shadow:0 0 0 0 rgba(245,158,11,0.7);"></span>
+                        In development
+                    </span>
+                </div>
+
+                <h3>AI Factory Hub</h3>
+                <p class="flagship-tagline">From raw content to published value – powered by AI</p>
+                <p class="description">
+                    A unified AI-powered platform orchestrating content creation, engineering automation,
+                    and multi-platform publishing. Each module below is a full project on its own.
+                </p>
+
+                <div class="modules-grid">
+                    <div class="module-chip">
+                        <i class="fas fa-brain"></i>
+                        <strong>AI Studio</strong>
+                        <small>Image / video / audio analysis, enhancement & generation.</small>
+                    </div>
+                    <div class="module-chip">
+                        <i class="fas fa-book"></i>
+                        <strong>Knowledge Studio</strong>
+                        <small>Document processing, PDF parsing, RAG search, vector DB.</small>
+                    </div>
+                    <div class="module-chip">
+                        <i class="fas fa-microchip"></i>
+                        <strong>Engineering Studio</strong>
+                        <small>Electronics, PCB, CAD, robotics, embedded automation.</small>
+                    </div>
+                    <div class="module-chip">
+                        <i class="fas fa-robot"></i>
+                        <strong>Automation Studio</strong>
+                        <small>n8n-powered workflow orchestration & integrations.</small>
+                    </div>
+                    <div class="module-chip">
+                        <i class="fas fa-film"></i>
+                        <strong>Content Factory</strong>
+                        <small>OBS → Whisper → Gemini → FFmpeg → subtitles → publish.</small>
+                    </div>
+                    <div class="module-chip">
+                        <i class="fas fa-share-nodes"></i>
+                        <strong>Publisher</strong>
+                        <small>Multi-platform publishing: YouTube, Telegram, Instagram…</small>
                     </div>
                 </div>
-                <div class="text-center mt-4">
-                  <a href="/apps" class="btn btn-primary">View All Projects</a>
+
+                <div class="project-card-footer">
+                    <span class="revenue-badge">
+                        <i class="fas fa-handshake"></i> Revenue-share available
+                    </span>
                 </div>
-             </div>
+            </div>
+
         </div>
-  </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ path('app_apps') }}" class="btn btn-primary btn-lg px-4">
+                <i class="fas fa-rocket me-2"></i> Explore All Projects
+            </a>
+        </div>
+    </div>
 </section>
 
 <section id="services-preview">

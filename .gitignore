@@ -3,7 +3,10 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-/*.save
+# Ignore editor/tool backup files
+*.save
+*.save.*
+
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
@@ -19,3 +22,4 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+

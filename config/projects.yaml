@@ -1,53 +1,651 @@
+# ============================================================
+# Development Engineering – Complete Project Catalog
+# ============================================================
+
 projects:
-  - name: "🤖💹 Trading Bot Dashboard"
-    path: "/trading"
+
+  # ============================================================
+  # ⭐ FLAGSHIP / LIVE PROJECTS
+  # ============================================================
+
+  - id: "btcusdt-alarm"
+    name: "BTCUSDT Realtime Alarm"
+    tagline: "Live crypto price monitoring with instant alerts"
+    description: "Real-time monitoring of the BTC/USDT pair on Binance with customizable price thresholds. Sends instant alerts via Telegram when conditions are met. Fully operational in production."
+    category: "web"
+    status: "live"
+    priority: "flagship"
     icon: "fab fa-bitcoin"
-    description: "Automated crypto trading with Telegram alerts and real-time monitoring."
-    category: "finance"
+    tech: ["Symfony", "WebSocket", "Binance API", "Telegram Bot", "MariaDB"]
+    features:
+      - "Real-time price streaming via WebSocket"
+      - "Customizable price & percentage thresholds"
+      - "Instant Telegram notifications"
+      - "Historical data charts"
+      - "Multiple alarm rules per user"
+    revenue_share: true
 
-  - name: "🏥 Parapharmacy Manager"
-    path: "/pharmacy"
+  - id: "ai-factory-hub"
+    name: "AI Factory Hub"
+    tagline: "From raw content to published value – powered by AI"
+    description: "A unified AI-powered platform orchestrating content creation, engineering automation, and multi-platform publishing. Each module below is a full project on its own."
+    category: "ai"
+    status: "in-development"
+    priority: "flagship"
+    icon: "fas fa-industry"
+    tech: ["Python", "C++", "n8n", "Whisper", "Gemini API", "Qt", "OBS"]
+    modules:
+      - name: "AI Studio"
+        icon: "fas fa-brain"
+        description: "Image / video / audio analysis, enhancement, and generation. Uses AI models for text, image, video, and 3D generation."
+      - name: "Knowledge Studio"
+        icon: "fas fa-book"
+        description: "Document processing, PDF parsing, RAG-based search, and vector database management."
+      - name: "Engineering Studio"
+        icon: "fas fa-microchip"
+        description: "Electronics, PCB design, CAD, robotics, and embedded systems automation – from concept to prototype."
+      - name: "Automation Studio"
+        icon: "fas fa-robot"
+        description: "n8n-powered workflow orchestration: scheduled triggers, webhooks, multi-service integrations."
+      - name: "Content Factory"
+        icon: "fas fa-film"
+        description: "Full pipeline: OBS recording → transcription (Whisper) → highlight detection (Gemini) → clip cutting (FFmpeg) → subtitles → captions → publishing."
+      - name: "Publisher"
+        icon: "fas fa-share-nodes"
+        description: "Multi-platform publishing via APIs: YouTube, Telegram, Discord, Instagram, TikTok, and more."
+    revenue_share: true
+
+  # ============================================================
+  # 🌐 WEB & SOFTWARE
+  # ============================================================
+
+  - id: "tunibook"
+    name: "TuniBook"
+    tagline: "Audio-First Social Network Platform"
+    description: "Your voice. Your memories. Your community. Share thoughts and stories through audio posts, with a Memory Vault, Echo module, and Ancestor Family Map."
+    category: "web"
+    status: "concept"
+    icon: "fas fa-microphone"
+    tech: ["Flutter", "React", "Node.js", "Python AI", "PostgreSQL", "Redis", "WebSocket", "Docker"]
+    features:
+      - "Audio-first social feed"
+      - "Memory Vault (time capsule)"
+      - "Echo module (sound memory)"
+      - "Ancestor Family Map"
+      - "AI recommendations"
+    revenue_share: true
+
+  - id: "multi-vendor-ecommerce"
+    name: "Multi-Vendor Ecommerce Platform"
+    tagline: "Multiple sellers. One platform. Endless possibilities."
+    description: "A scalable marketplace where multiple vendors sell their products. Includes seller dashboards, product catalogs, secure payments, and order tracking."
+    category: "web"
+    status: "concept"
     icon: "fas fa-store"
-    description: "Inventory, sales, suppliers, and purchase orders management."
-    category: "pharmacy"
+    tech: ["Symfony 7.4", "Vue.js", "React", "MariaDB", "Redis", "Docker", "Kubernetes"]
+    features:
+      - "Multi-vendor management"
+      - "Product catalog & categories"
+      - "Secure payment gateway"
+      - "Order tracking & notifications"
+      - "Scalable architecture"
+    revenue_share: true
 
-  - name: "🛒 I Buy E‑commerce"
-    path: "/ibuy"
-    icon: "fas fa-shopping-cart"
-    description: "Online marketplace with cart and payments (coming soon)."
-    category: "ecommerce"
+  - id: "lms-platform"
+    name: "Web E-Learning Platform (LMS)"
+    tagline: "Learn. Grow. Succeed."
+    description: "A complete Learning Management System for organizations, training centers, and educational institutions. Includes course management, quizzes, certifications, and forums."
+    category: "web"
+    status: "concept"
+    icon: "fas fa-graduation-cap"
+    tech: ["React", "Next.js", "Node.js", "PostgreSQL", "MongoDB", "Moodle", "Stripe"]
+    features:
+      - "Course & lesson management"
+      - "Quiz & assessment engine"
+      - "Digital certifications"
+      - "Progress tracking & analytics"
+      - "AI-assisted recommendations"
+    revenue_share: true
 
-  - name: "🗄️ My DataBases"
-    path: "/db"
-    icon: "fas fa-database"
-    description: "Manage my MariaDB databases."
-#    external: true
-    category: "database"
+  - id: "freelance-marketplace"
+    name: "Web Freelance Marketplace"
+    tagline: "Find Opportunities. Build Your Career."
+    description: "A marketplace connecting freelancers with businesses, startups, and clients. Includes project posting, proposals, contracts, secure payments, and reputation system."
+    category: "web"
+    status: "concept"
+    icon: "fas fa-briefcase"
+    tech: ["React", "Next.js", "Node.js", "PostgreSQL", "MongoDB", "Stripe", "PayPal"]
+    features:
+      - "Project & proposal management"
+      - "Secure contracts & payments"
+      - "Rating & reputation system"
+      - "Real-time messaging"
+      - "Integrated notifications"
+    revenue_share: true
+
+  - id: "pharmacy-manager"
+    name: "Parapharmacy Manager"
+    tagline: "Complete inventory & business management"
+    description: "Inventory, sales, purchases, suppliers, and statistics for parapharmacies. Live in production with 400+ products managed."
+    category: "web"
+    status: "live"
+    icon: "fas fa-pills"
+    tech: ["Symfony 7.4", "MariaDB", "Bootstrap 5", "AssetMapper"]
+    features:
+      - "Stock management with alerts"
+      - "Purchases & sales tracking"
+      - "Supplier & customer management"
+      - "Invoices & credit notes"
+      - "Statistics & reports"
+    revenue_share: false
 
   # ============================================================
-  # 🥽 VR/XR STUDIO – Immersive Experiences & Hardware
+  # 🥽 VR / XR HARDWARE
   # ============================================================
 
-  - name: "🥽 VR/XR Studio"
-    path: "/vr-studio"
-    icon: "fas fa-vr-cardboard"
-    description: "Full‑body VR character design, immersive apps, and custom accessories."
+  - id: "vr-belt"
+    name: "VR Belt – Full-Body Tracking System"
+    tagline: "Turn your body into the ultimate VR controller"
+    description: "A wearable belt with IMU sensors providing precise foot and lower-body tracking. Enables natural locomotion in VR without controllers."
     category: "vr"
+    status: "prototype"
+    icon: "fas fa-shoe-prints"
+    tech: ["ESP32", "IMU (MPU-6050)", "BLE 5.2", "OpenXR", "Unity", "Raspberry Pi"]
+    features:
+      - "Precise foot & lower-body tracking"
+      - "Natural locomotion (walk, run, jump, crouch)"
+      - "Low-latency data transmission (<10ms)"
+      - "20h+ battery with wireless charging"
+      - "Works with Meta Quest 3/3S/Pro and PC VR"
+    revenue_share: true
 
+  - id: "omni-treadmill"
+    name: "Omnidirectional Treadmill"
+    tagline: "360° movement freedom"
+    description: "A compact omnidirectional treadmill that lets users walk, run, and turn in any direction with realistic walking sensation."
+    category: "vr"
+    status: "prototype"
+    icon: "fas fa-running"
+    tech: ["C/C++", "ROS 2", "Python", "CAN Bus", "IMU", "Motor Drivers"]
+    features:
+      - "Walk, run, strafe, jump – all in one platform"
+      - "360° movement freedom"
+      - "Safe & immersive locomotion"
+      - "Compact & modular design"
+      - "Real-time motion adaptation"
+    revenue_share: true
+
+  - id: "controller-free"
+    name: "Controller-Free Interaction System"
+    tagline: "Interact with virtual worlds using your body"
+    description: "A hands-free VR interaction system combining hand tracking, body tracking, gesture recognition, and voice commands. Works across all VR platforms."
+    category: "vr"
+    status: "research"
+    icon: "fas fa-hand"
+    tech: ["Unity", "OpenXR", "MediaPipe", "TensorFlow", "PyTorch", "C#", "Computer Vision"]
+    features:
+      - "Hand & finger tracking (full skeleton)"
+      - "Gesture recognition with AI"
+      - "Eye & head gaze support"
+      - "Voice commands + lip sync"
+      - "Low-latency & highly accurate"
+    revenue_share: true
+
+  - id: "digital-twin-tracking"
+    name: "Digital Twin Tracking System"
+    tagline: "Scan once, track anywhere"
+    description: "Scan a physical object with Meta Quest, attach it to the VR Belt, and track it in real time. Track position, size, and measurements – even when not looking at it."
+    category: "vr"
+    status: "research"
+    icon: "fas fa-cube"
+    tech: ["Unity", "OpenXR", "Meta Quest SDK", "IMU", "Computer Vision", "C++"]
+    features:
+      - "Real-time tracking & 3D position"
+      - "Long-distance follow"
+      - "Use cases: logistics, industry, research"
+      - "Computer vision-based recognition"
+    revenue_share: true
+
+  - id: "vr-companion-platform"
+    name: "VR Companion Platform"
+    tagline: "All your VR world, in one place"
+    description: "A cross-platform companion app (PC/Mobile/Web) to manage VR devices, track stats, join communities, and stay connected."
+    category: "vr"
+    status: "in-development"
+    icon: "fas fa-desktop"
+    tech: ["Flutter", "React", "Firebase", "WebSocket", "APIs", "Node.js"]
+    features:
+      - "Device management & pairing"
+      - "Real-time tracking & analytics"
+      - "Achievements & leaderboards"
+      - "Social hub & communities"
+      - "Marketplace & content store"
+    revenue_share: true
+
+  - id: "3d-quest-scanner"
+    name: "3D Quest Scanner"
+    tagline: "Real world → 3D world in minutes"
+    description: "AI-powered 3D scanner using Meta Quest 3 to scan real-world objects and convert them into high-quality 3D models."
+    category: "vr"
+    status: "concept"
+    icon: "fas fa-camera"
+    tech: ["Unity", "OpenXR", "ARKit/ARCore", "ArchViz", "Python", "Blender"]
+    features:
+      - "Real-world object scanning"
+      - "Automatic mesh cleanup & retopology"
+      - "Multi-format export (OBJ, FBX, GLB, STL)"
+      - "Textured 3D models in minutes"
+    revenue_share: true
 
   # ============================================================
-  # 🤖 ROBOTICS & AUTOMATION
+  # 🥽 VR / XR APPLICATIONS
   # ============================================================
 
-  - name: "🤖 Robot Waiter"
-    path: "/robot-waiter"
+  - id: "fitness-vr"
+    name: "FitnessVR – Virtual Motivational Coach"
+    tagline: "Your personal VR fitness trainer"
+    description: "Interactive fitness coach that guides workouts, monitors movements, and motivates users. Supports the VR Belt for full-body tracking."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-dumbbell"
+    tech: ["Unity", "Meta Quest SDK", "Motion Tracking", "AI", "Computer Vision"]
+    features:
+      - "Home fitness & gamification"
+      - "Personalized training"
+      - "Health tracking"
+      - "Real-time feedback"
+    revenue_share: true
+
+  - id: "nature-serenity-vr"
+    name: "Nature Serenity VR"
+    tagline: "Relaxation and meditation in nature"
+    description: "Relaxation and meditation experience in natural environments: forests, beaches, mountains, waterfalls. Ideal for stress relief and mindfulness."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-spa"
+    tech: ["Unity", "OpenXR", "Meta Quest", "Spatial Audio"]
+    features:
+      - "Realistic environments"
+      - "Companion for breathing"
+      - "Stress relief & wellness"
+      - "Accessible to all"
+    revenue_share: true
+
+  - id: "virtual-tunisia"
+    name: "Virtual Tunisia Explorer & Historical Museum"
+    tagline: "Explore Tunisia like never before"
+    description: "Explore Tunisian cities and cultural sites. Visit any place in its historical mode and see its evolution across different periods."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-landmark"
+    tech: ["Unreal Engine 5", "Photogrammetry", "Meta Quest", "OpenXR", "Spatial Audio"]
+    features:
+      - "Tourism promotion"
+      - "Cultural preservation"
+      - "Educational value"
+      - "Time travel experience"
+    revenue_share: true
+
+  - id: "xr-ai-companion"
+    name: "XR AI Spatial Companion App"
+    tagline: "One companion. Endless possibilities."
+    description: "An intelligent AI companion that enhances all XR experiences. Talks, explains, jokes, assists, adapts, learns, motivates, and guides."
+    category: "vr-apps"
+    status: "concept"
     icon: "fas fa-robot"
-    description: "Autonomous robot waiter for coffee shops and restaurants."
+    tech: ["Unity", "OpenXR", "Meta Quest SDK", "LLM (AI)", "Speech Recognition", "Spatial Audio"]
+    features:
+      - "Context-aware assistance"
+      - "Natural interaction (voice, gestures)"
+      - "Personalized companion"
+      - "Multi-app support"
+    revenue_share: true
+
+  - id: "combat-vr"
+    name: "Combat VR – Boxe / Martial Arts / Colosseum"
+    tagline: "Full combat experience in VR"
+    description: "Full combat experience: boxing, kickboxing, martial arts, sword fighting, and gladiator battles. Realistic physics and AI opponents."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-fist-raised"
+    tech: ["Unity", "Meta Quest SDK", "OpenXR", "AI", "Physics Simulation"]
+    features:
+      - "Immersive combat"
+      - "Physical exercise"
+      - "Multiple fighting styles"
+      - "Realistic physics & AI behavior"
+    revenue_share: true
+
+  - id: "vr-football"
+    name: "VR Football Challenge"
+    tagline: "Realistic VR football with foot tracking"
+    description: "VR football experience with innovative locomotion and foot-tracking using different movement systems and the VR Belt."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-futbol"
+    tech: ["Unity", "Meta Quest SDK", "OpenXR", "Physics Simulation"]
+    features:
+      - "Realistic gameplay"
+      - "Physical activity"
+      - "Immersive experience"
+      - "Precise movement & kicking"
+    revenue_share: true
+
+  - id: "gorilla-new-journey"
+    name: "Gorilla – A New Journey"
+    tagline: "Gorilla Tag, but as an adventure"
+    description: "Adventure game using Gorilla Tag mechanics (swinging, climbing, exploring) in an open world with varied environments."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-paw"
+    tech: ["Unity", "OpenXR", "Meta Quest SDK", "Physics-Based Locomotion"]
+    features:
+      - "Innovative movement"
+      - "Physical gameplay"
+      - "Strong VR identity"
+      - "Adventure mode"
+    revenue_share: true
+
+  - id: "xr-learning"
+    name: "XR Learning – Piano & Guitar"
+    tagline: "Learn music in VR"
+    description: "Learn piano or guitar in VR with hand tracking and interactive 3D tutorials."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-music"
+    tech: ["Unity", "OpenXR", "Meta Quest SDK", "Hand Tracking", "Audio/MIDI Processing"]
+    features:
+      - "Interactive music education"
+      - "Gamification"
+      - "Immersive learning"
+      - "Hand tracking precision"
+    revenue_share: true
+
+  - id: "escape-simulator"
+    name: "Escape Simulator VR"
+    tagline: "Immersive escape rooms"
+    description: "Immersive escape rooms with puzzles, hidden clues, and interactive environments. Includes hints and difficulty balancing."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-door-closed"
+    tech: ["Unity", "OpenXR", "Meta Quest SDK"]
+    features:
+      - "Engaging puzzles"
+      - "Highly replayable"
+      - "Immersive atmosphere"
+      - "Companion hints"
+    revenue_share: true
+
+  - id: "jetpack-arena"
+    name: "Jetpack Arena VR"
+    tagline: "Competitive jetpack combat"
+    description: "Competitive jetpack combat in spectacular arenas with physics-based flight and energy management."
+    category: "vr-apps"
+    status: "concept"
+    icon: "fas fa-rocket"
+    tech: ["Unity", "OpenXR", "Meta Quest SDK", "Physics"]
+    features:
+      - "Unique gameplay"
+      - "Vertical combat"
+      - "Immersive freedom"
+      - "Physics-based flight"
+    revenue_share: true
+
+  # ============================================================
+  # 🎮 3D GAME PROJECTS (Unreal Engine)
+  # ============================================================
+
+  - id: "carthaginian-wars"
+    name: "Carthaginian Wars"
+    tagline: "Strategy in the Punic Wars"
+    description: "Lead Carthaginian forces against the Roman Republic. Command armies, manage resources, and rewrite history in epic battles."
+    category: "games"
+    status: "concept"
+    icon: "fas fa-shield-alt"
+    tech: ["Unreal Engine 5", "UE5 Lumen", "Nanite", "C++"]
+    features:
+      - "Cutting-edge graphics"
+      - "Strong historical interest"
+      - "Large-scale battles"
+      - "Cross-appeal to strategy & history fans"
+    revenue_share: true
+
+  - id: "tunisian-adventure"
+    name: "Tunisian Adventure"
+    tagline: "A story-driven adventure in Tunisia"
+    description: "A story-driven adventure inspired by Tunisia's history, culture, and legends. Explore ancient lands, solve puzzles, meet characters."
+    category: "games"
+    status: "concept"
+    icon: "fas fa-scroll"
+    tech: ["Unreal Engine 5"]
+    features:
+      - "Cultural storytelling & education"
+      - "Immersive world building"
+      - "Exploration & puzzles"
+      - "Cinematic adventure"
+    revenue_share: true
+
+  - id: "gravity-chef"
+    name: "Gravity Chef"
+    tagline: "Cooking in zero gravity"
+    description: "You are Chef Orion, preparing the legendary Nebula Soufflé in zero gravity. Master gravity zones to catch ingredients and control chaos."
+    category: "games"
+    status: "concept"
+    icon: "fas fa-utensils"
+    tech: ["Unreal Engine 5"]
+    features:
+      - "Unique cooking physics"
+      - "Full VR immersion"
+      - "Highly replayable"
+      - "Family-friendly"
+    revenue_share: true
+
+  - id: "sound-of-silence"
+    name: "Sound of Silence"
+    tagline: "A blind musician's journey"
+    description: "You are Kaelen, a blind musician trapped in a vast void. Navigate using sound, uncover memories, and find the truth behind the accident."
+    category: "games"
+    status: "concept"
+    icon: "fas fa-volume-up"
+    tech: ["Unreal Engine 5", "Composer"]
+    features:
+      - "Sound-based gameplay"
+      - "Deep narrative"
+      - "Accessibility innovator"
+      - "Unique atmosphere"
+    revenue_share: true
+
+  - id: "time-space-heist"
+    name: "Time-Space Heist"
+    tagline: "A heist across time"
+    description: "You are Mira Vance, a time-specialist hired for the ultimate heist. Break into the Chronos Vault by rewinding individual objects through time."
+    category: "games"
+    status: "concept"
+    icon: "fas fa-clock"
+    tech: ["Unreal Engine 5"]
+    features:
+      - "Fresh object-specific time mechanic"
+      - "Strategic puzzle design"
+      - "Heist theme"
+      - "Multiple endings"
+    revenue_share: true
+
+  - id: "idle-bots"
+    name: "Idle Bots"
+    tagline: "Collect. Build. Swarm. Dominate."
+    description: "In a scrapyard world, collect scrap and broken bots. Build your robot army, salvage enemies, and become the ultimate Hoard King!"
+    category: "games"
+    status: "concept"
+    icon: "fas fa-robot"
+    tech: ["Unity", "Godot", "C#", "Custom C++", "Mirror", "Photon", "Steam"]
+    features:
+      - "King of the Hill & Battery Rush modes"
+      - "Addictive grow-or-be-eaten loop"
+      - "Idle mechanics (swarm)"
+      - "Multiplayer (future DLCs)"
+    revenue_share: true
+
+  # ============================================================
+  # 🤖 EMBEDDED / OS
+  # ============================================================
+
+  - id: "mbed-os"
+    name: "Mbed OS Custom Hardware Platform"
+    tagline: "Build your own custom hardware platform"
+    description: "Port and fork Mbed OS to support custom hardware, creating a fully independent, portable platform on any ARM Cortex-M microcontroller."
+    category: "embedded"
+    status: "in-development"
+    icon: "fas fa-microchip"
+    tech: ["C", "C++", "ARM Cortex-M", "RTOS", "HAL", "Mbed CLI", "GCC"]
+    features:
+      - "Freedom from vendor lock-in"
+      - "Deep understanding of embedded systems"
+      - "Custom hardware support"
+      - "Full control over OS and drivers"
+    revenue_share: true
+
+  # ============================================================
+  # ⚙️ CNC & AUTOMATION
+  # ============================================================
+
+  - id: "arcade-automation"
+    name: "Arcade Machine Automation & Supervision"
+    tagline: "Dual-cabinet arcade automation"
+    description: "Cabinet 1 (Claw Crane): 3-axis motion system with X/Y positioning and Z-axis descent. Cabinet 2 (Smart Wheel): casino-style spinning wheel with auto-rotation."
+    category: "cnc"
+    status: "concept"
+    icon: "fas fa-gamepad"
+    tech: ["Robotics", "Motors", "Sensors", "Unity", "Real-Time Control"]
+    features:
+      - "Unique interactive experience"
+      - "Reliable mechanics"
+      - "Dual engagement"
+      - "Software/hardware co-design"
+    revenue_share: true
+
+  - id: "spif-cnc"
+    name: "Incremental Metal Forming (SPIF) CNC Machine"
+    tagline: "Progressive sheet metal deformation"
+    description: "Progressive sheet metal deformation using CNC control loops and actuator modeling."
+    category: "cnc"
+    status: "concept"
+    icon: "fas fa-industry"
+    tech: ["CNC", "Actuators", "Control Loops"]
+    features:
+      - "Emerging technology"
+      - "Low tooling cost"
+      - "Ideal for small batches"
+      - "Precision accuracy"
+    revenue_share: true
+
+  - id: "whiteboard-plotter"
+    name: "Mobile Whiteboard Plotter Didactic Tool"
+    tagline: "Robotic plotter on a whiteboard"
+    description: "Robotics plotter with magnetic attachment moving across a whiteboard to execute geometric drawings and text."
+    category: "cnc"
+    status: "concept"
+    icon: "fas fa-pen"
+    tech: ["Robotics", "Motors", "Control"]
+    features:
+      - "Innovative teaching tool"
+      - "Low footprint"
+      - "High repeatability"
+      - "Positioning precision"
+    revenue_share: true
+
+  - id: "smd-pick-place"
+    name: "Automatic Pick-and-Place SMD Machine"
+    tagline: "PCB assembly automation"
+    description: "Gantry CNC with vacuum pick-and-place head, computer vision for component recognition, and custom control software."
+    category: "cnc"
+    status: "concept"
+    icon: "fas fa-microchip"
+    tech: ["Robotics", "Computer Vision", "CNC", "Actuators"]
+    features:
+      - "PCB assembly automation"
+      - "Significant time savings"
+      - "High precision"
+      - "Vision camera calibration"
+    revenue_share: true
+
+  - id: "desktop-cnc-engraver"
+    name: "Desktop CNC Engraver (2D/3D)"
+    tagline: "Precision milling spindle engraver"
+    description: "Precision milling spindle engraver for small wood, plastic, and light metal objects with SVG/G-code UI integration."
+    category: "cnc"
+    status: "concept"
+    icon: "fas fa-cut"
+    tech: ["CNC", "G-code", "SVG"]
+    features:
+      - "Material versatility"
+      - "Low unit production cost"
+      - "Easy personalization"
+      - "Fine surface finishing"
+    revenue_share: true
+
+  - id: "open-hardware-3d-printer"
+    name: "Open-Hardware 3D Printer"
+    tagline: "Cartesian or Delta FDM/SLA printer"
+    description: "Open-hardware additive manufacturing machine (FDM or SLA) with optimized slicer parameters and control dashboard."
+    category: "cnc"
+    status: "concept"
+    icon: "fas fa-cube"
+    tech: ["FDM", "SLA", "Slicer", "G-code"]
+    features:
+      - "Full pipeline control"
+      - "Customizable"
+      - "Additive technology mastery"
+      - "Material selection"
+    revenue_share: true
+
+  # ============================================================
+  # 📱 ROBOTICS / IOT
+  # ============================================================
+
+  - id: "robot-waiter"
+    name: "Robot Waiter"
+    tagline: "Autonomous service robot for restaurants"
+    description: "Autonomous robot waiter for coffee shops and restaurants, paired with a self-service tablet app."
     category: "robotics"
     status: "prototype"
+    icon: "fas fa-robot"
+    tech: ["ROS 2", "Raspberry Pi", "Android", "IoT"]
+    features:
+      - "Autonomous navigation"
+      - "Tablet integration"
+      - "Order delivery"
+      - "Restaurant workflow"
+    revenue_share: true
 
-  - name: "📱 Self‑Service Tablet System"
-    path: "/self-service"
-    icon: "fas fa-tablet-alt"
-    description: "Android app on customer tablets for ordering and payment at restaurants."
+  - id: "self-service-tablets"
+    name: "Self-Service Tablet System"
+    tagline: "Android ordering system for restaurants"
+    description: "Android app on customer tablets for ordering and payment at restaurants, integrated with the Robot Waiter system."
     category: "robotics"
+    status: "prototype"
+    icon: "fas fa-tablet-alt"
+    tech: ["Android", "Kotlin", "REST API", "Symfony backend"]
+    features:
+      - "Table-side ordering"
+      - "Secure payments"
+      - "Kitchen sync"
+      - "Robot integration"
+    revenue_share: true
+
+  # ============================================================
+  # 💡 OTHER (revenue-share opportunities)
+  # ============================================================
+
+  - id: "selfie-spinner"
+    name: "Selfie Spinner Platform"
+    tagline: "Automated 360° selfie platform"
+    description: "A monetizable selfie spinner platform for events and public spaces. High revenue potential with a simple concept."
+    category: "other"
+    status: "idea"
+    icon: "fas fa-camera-retro"
+    tech: ["Hardware", "Mobile App", "Payments"]
+    features:
+      - "High revenue potential"
+      - "Event-friendly"
+      - "Low maintenance"
+    revenue_share: true

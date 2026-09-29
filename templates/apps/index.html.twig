@@ -1,112 +1,192 @@
-{# templates/apps/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Project Hub | Development Engineering{% endblock %}
+{% block title %}Project Catalog | Development Engineering{% endblock %}
 
 {% block body %}
-<a href="{{ path('home') }}" class="btn btn-secondary" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">← Back to Home</a>
+<div class="portfolio-page">
+    <div class="container py-4">
 
-<div class="container">
-    <h1>Welcome to Development Engineering</h1>
-    <p>Select a project to manage or explore:</p>
+        <!-- Back button -->
+        <a href="{{ path('home') }}" class="btn btn-outline-light btn-sm mb-4">
+            <i class="fas fa-arrow-left me-1"></i> Back to Home
+        </a>
 
-    {# Group projects by category #}
-    {% set categories = {
-        '': 'All Projects',
-        'vr': '🥽 VR/XR Studio',
-        'robotics': '🤖 Robotics & Automation'
-    } %}
+        <!-- ============================================================
+             HERO
+             ============================================================ -->
+        <div class="hero">
+            <span class="hero-eyebrow">Innovation Suite</span>
+            <h1>Project Catalog</h1>
+            <p class="lead">
+                A curated collection of immersive, intelligent, and connected projects.
+                From VR hardware to AI orchestration, web platforms, and CNC automation.
+            </p>
+        </div>
 
-    {# Default: show all if no category filter #}
-    {% set activeCategory = app.request.query.get('category', '') %}
+        <!-- ============================================================
+             FILTERS
+             ============================================================ -->
+        {% set activeCategory = app.request.query.get('category', '') %}
 
-    <div class="category-filters mb-4">
-        <a href="{{ path('app_apps') }}" class="btn {{ activeCategory == '' ? 'btn-primary' : 'btn-outline-secondary' }}">All Projects</a>
-        <a href="{{ path('app_apps', {category: 'vr'}) }}" class="btn {{ activeCategory == 'vr' ? 'btn-primary' : 'btn-outline-secondary' }}">🥽 VR/XR Studio</a>
-        <a href="{{ path('app_apps', {category: 'robotics'}) }}" class="btn {{ activeCategory == 'robotics' ? 'btn-primary' : 'btn-outline-secondary' }}">🤖 Robotics & Automation</a>
-    </div>
+        {# Helper: count projects per category #}
+        {% set counts = {} %}
+        {% for p in projects %}
+            {% set c = p.category|default('other') %}
+            {% set counts = counts|merge({ (c): (counts[c]|default(0)) + 1 }) %}
+        {% endfor %}
 
-    {% set filteredProjects = projects|filter(p => activeCategory == '' or (p.category|default('') == activeCategory)) %}
+        <div class="filter-bar">
+            <a href="{{ path('app_apps') }}"
+               class="filter-pill {{ activeCategory == '' ? 'active' : '' }}">
+                <i class="fas fa-th-large"></i> All
+                <span class="count">{{ projects|length }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'ai'}) }}"
+               class="filter-pill {{ activeCategory == 'ai' ? 'active' : '' }}">
+                <i class="fas fa-brain"></i> AI
+                <span class="count">{{ counts.ai|default(0) }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'vr'}) }}"
+               class="filter-pill {{ activeCategory == 'vr' ? 'active' : '' }}">
+                <i class="fas fa-vr-cardboard"></i> VR Hardware
+                <span class="count">{{ counts.vr|default(0) }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'vr-apps'}) }}"
+               class="filter-pill {{ activeCategory == 'vr-apps' ? 'active' : '' }}">
+                <i class="fas fa-gamepad"></i> VR Apps
+                <span class="count">{{ counts['vr-apps']|default(0) }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'games'}) }}"
+               class="filter-pill {{ activeCategory == 'games' ? 'active' : '' }}">
+                <i class="fas fa-dice-d20"></i> 3D Games
+                <span class="count">{{ counts.games|default(0) }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'web'}) }}"
+               class="filter-pill {{ activeCategory == 'web' ? 'active' : '' }}">
+                <i class="fas fa-globe"></i> Web
+                <span class="count">{{ counts.web|default(0) }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'embedded'}) }}"
+               class="filter-pill {{ activeCategory == 'embedded' ? 'active' : '' }}">
+                <i class="fas fa-microchip"></i> Embedded
+                <span class="count">{{ counts.embedded|default(0) }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'cnc'}) }}"
+               class="filter-pill {{ activeCategory == 'cnc' ? 'active' : '' }}">
+                <i class="fas fa-industry"></i> CNC
+                <span class="count">{{ counts.cnc|default(0) }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'robotics'}) }}"
+               class="filter-pill {{ activeCategory == 'robotics' ? 'active' : '' }}">
+                <i class="fas fa-robot"></i> Robotics
+                <span class="count">{{ counts.robotics|default(0) }}</span>
+            </a>
+            <a href="{{ path('app_apps', {category: 'other'}) }}"
+               class="filter-pill {{ activeCategory == 'other' ? 'active' : '' }}">
+                <i class="fas fa-lightbulb"></i> Other
+                <span class="count">{{ counts.other|default(0) }}</span>
+            </a>
+        </div>
 
-    <div class="row">
-        {% for project in filteredProjects %}
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {% if project.icon %}
-                                <i class="{{ project.icon }} text-primary me-2"></i>
-                            {% endif %}
-                            {{ project.name }}
-                        </h5>
-                        <p class="card-text">{{ project.description }}</p>
+        <!-- ============================================================
+             PROJECT CARDS
+             ============================================================ -->
+        {% set filtered = projects|filter(p => activeCategory == '' or (p.category|default('other')) == activeCategory) %}
+
+        {% if filtered|length > 0 %}
+            <div class="catalog-grid">
+                {% for project in filtered %}
+                    <div class="project-card">
+
+                        <div class="project-card-header">
+                            <div class="project-card-icon">
+                                <i class="{{ project.icon|default('fas fa-cube') }}"></i>
+                            </div>
+                            <div>
+                                <h4>{{ project.name }}</h4>
+                                {% if project.tagline is defined %}
+                                    <div class="tagline">{{ project.tagline }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
 
                         {# Status badge #}
                         {% if project.status is defined %}
-                            <span class="badge 
-                                {% if project.status == 'prototype' %}bg-warning
-                                {% elseif project.status == 'research' %}bg-info
-                                {% elseif project.status == 'production' %}bg-success
-                                {% else %}bg-secondary{% endif %} 
-                                mb-2">
-                                {{ project.status|capitalize }}
-                            </span>
+                            {% set statusClass = 'status-' ~ (project.status|replace({'_': '-'})) %}
+                            <div>
+                                <span class="status-badge {{ statusClass }}">
+                                    {% if project.status == 'live' %}<span class="live-dot"></span>{% endif %}
+                                    {{ project.status|replace({'-': ' '})|title }}
+                                </span>
+                            </div>
                         {% endif %}
 
-                        <a href="{{ project.path }}" class="btn btn-outline-primary" 
-                           {% if project.external is defined and project.external %}target="_blank"{% endif %}>
-                            Learn more
-                        </a>
+                        <p class="description">{{ project.description }}</p>
+
+                        {# Modules (for AI Factory Hub) #}
+                        {% if project.modules is defined %}
+                            <div class="modules-grid mb-2">
+                                {% for module in project.modules %}
+                                    <div class="module-chip">
+                                        <i class="{{ module.icon }}"></i>
+                                        <strong>{{ module.name }}</strong>
+                                        <small>{{ module.description|slice(0, 90) }}{% if module.description|length > 90 %}…{% endif %}</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {# Tech chips #}
+                        {% if project.tech is defined %}
+                            <div class="tech-chips">
+                                {% for t in project.tech|slice(0, 6) %}
+                                    <span class="tech-chip">{{ t }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="project-card-footer">
+                            {% if project.revenue_share|default(false) %}
+                                <span class="revenue-badge">
+                                    <i class="fas fa-handshake"></i> Revenue-share
+                                </span>
+                            {% else %}
+                                <span></span>
+                            {% endif %}
+
+                            {% if project.priority|default('') == 'flagship' %}
+                                <span class="status-badge status-live">
+                                    <i class="fas fa-star"></i> Flagship
+                                </span>
+                            {% endif %}
+                        </div>
+
                     </div>
-                </div>
+                {% endfor %}
             </div>
         {% else %}
-            <div class="col-12">
-                <p class="text-muted">No projects found in this category.</p>
+            <div class="text-center py-5" style="color: var(--text-muted);">
+                <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                No projects found in this category.
             </div>
-        {% endfor %}
-    </div>
+        {% endif %}
 
-    <div class="mt-5 p-4 bg-light rounded">
-        <h3>🚀 Future Projects</h3>
-        <ul class="list-unstyled">
-            <li>🔬 Full‑body VR character project (foundation for all VR apps)</li>
-            <li>📚 More VR experiences</li>
-            <li>🤖 Advanced robotics integration</li>
-        </ul>
+        <!-- ============================================================
+             REVENUE-SHARE BANNER
+             ============================================================ -->
+        <div class="revenue-banner">
+            <h3><i class="fas fa-handshake me-2"></i> All Projects Available on Revenue-Share Basis</h3>
+            <p>
+                Every project listed here is open for <strong>revenue-share %</strong> collaboration.
+                Bring your domain expertise, funding, or audience – and let's build together.
+                Whether it's a flagship like <em>BTCUSDT Realtime Alarm</em> or a high-potential concept
+                like the <em>Selfie Spinner Platform</em>, we're open to partnerships that create real value.
+            </p>
+            <a href="#contact" class="btn btn-primary px-4">
+                <i class="fas fa-envelope me-2"></i> Discuss a Collaboration
+            </a>
+        </div>
+
     </div>
 </div>
-
-<style>
-        body {
-            background-image: url('/images/background.jpg');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-    .container {
-        max-width: 1200px;
-        margin: 50px auto;
-        padding: 20px;
-        text-align: center;
-        background-color: rgba(255, 255, 255, 0.85);
-        border-radius: 20px;
-        min-height: 80vh;
-    }
-    .category-filters .btn {
-        margin: 0 5px;
-        border-radius: 30px;
-        padding: 8px 24px;
-    }
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-</style>
 {% endblock %}
