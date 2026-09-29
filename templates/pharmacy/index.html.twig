@@ -56,13 +56,66 @@ Rima Parapharmacy Manager
     </div>
 </div>
 
-<!-- Stock status card -->
-            <div class="card mb-4 shadow-sm border-success">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-check-circle text-success"></i> Votre stock en bon état</h5>
-                    <p class="card-text">Aucune rupture de stock. Pensez à vérifier les produits proches de péremption.</p>
-                </div>
-</div>
+{# ---------- Stock status card (DYNAMIC) ---------- #}
+{# Colors and message change based on out-of-stock / low-stock counts #}
+
+{% if outOfStockCount > 0 %}
+    {# --- RED: at least one product out of stock --- #}
+    <div class="card mb-4 shadow-sm border-danger">
+        <div class="card-body">
+            <h5 class="card-title">
+                <i class="fas fa-exclamation-circle text-danger"></i>
+                Attention : rupture(s) de stock
+            </h5>
+            <p class="card-text mb-2">
+                <strong class="text-danger">{{ outOfStockCount }}</strong> produit(s) en rupture de stock
+                {% if lowStockCount > 0 %}
+                    et <strong class="text-warning">{{ lowStockCount }}</strong> produit(s) en stock faible.
+                {% else %}
+                    .
+                {% endif %}
+            </p>
+            <a href="{{ path('app_pharmacy_stock_index', {'status': 'out'}) }}"
+               class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-eye me-1"></i> Voir les produits en rupture
+            </a>
+        </div>
+    </div>
+
+{% elseif lowStockCount > 0 %}
+    {# --- YELLOW: no rupture, but some products are low --- #}
+    <div class="card mb-4 shadow-sm border-warning">
+        <div class="card-body">
+            <h5 class="card-title">
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+                Stocks faibles à surveiller
+            </h5>
+            <p class="card-text mb-2">
+                Aucune rupture, mais <strong class="text-warning">{{ lowStockCount }}</strong> produit(s)
+                sont au niveau minimum ou en dessous.
+            </p>
+            <a href="{{ path('app_pharmacy_stock_index', {'status': 'low'}) }}"
+               class="btn btn-sm btn-outline-warning">
+                <i class="fas fa-eye me-1"></i> Voir les stocks faibles
+            </a>
+        </div>
+    </div>
+
+{% else %}
+    {# --- GREEN: everything is fine --- #}
+    <div class="card mb-4 shadow-sm border-success">
+        <div class="card-body">
+            <h5 class="card-title">
+                <i class="fas fa-check-circle text-success"></i>
+                Votre stock en bon état
+            </h5>
+            <p class="card-text mb-0">
+                Aucune rupture de stock ni alerte de stock faible.
+                Pensez à vérifier les produits proches de péremption.
+            </p>
+        </div>
+    </div>
+{% endif %}
 
 {# Alerte péremption #}
 <div class="card mb-4 shadow-sm border-danger">

@@ -27,6 +27,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use App\Entity\Pharmacy\Achat;
 use App\Repository\Pharmacy\StockRepository;
+use App\Entity\Pharmacy\Stock;
 
 final class DashboardController extends AbstractController
 {
@@ -97,6 +98,25 @@ final class DashboardController extends AbstractController
         // Récupérer les alertes d'expiration (seuil à 30 jours)
         $expiryAlerts = $stockRepo->findExpiryAlerts(30);
 
+        // ← NEW: Count of products currently out of stock (quantity = 0)
+        $outOfStockCount = (int) $em->getRepository(Stock::class)
+            ->createQueryBuilder('s')
+            ->select('COUNT(s.id)')
+            ->where('s.quantite = 0')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // ← NEW: Count of products that are low on stock
+        // (quantity > 0 AND quantity <= quantite_min)
+        $lowStockCount = (int) $em->getRepository(Stock::class)
+            ->createQueryBuilder('s')
+            ->select('COUNT(s.id)')
+            ->where('s.quantite > 0')
+            ->andWhere('s.quantite_min IS NOT NULL')
+            ->andWhere('s.quantite <= s.quantite_min')
+            ->getQuery()
+            ->getSingleScalarResult();
+
         return $this->render('pharmacy/index.html.twig', [
             //'title' => 'Rima-Para',
             'dailyTotal' => $dailyTotal,
@@ -105,6 +125,8 @@ final class DashboardController extends AbstractController
             'dailyProfit' => $dailyProfit,
             'expiredProducts' => $expiryAlerts['expired'],
             'soonExpiringProducts' => $expiryAlerts['soon'],
+            'outOfStockCount'      => $outOfStockCount,
+            'lowStockCount'        => $lowStockCount,
         ]);
 
 

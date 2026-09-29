@@ -43,6 +43,117 @@
 
     <li><a href="{{ path('pharmacy_dashboard') }}" class="btn btn-secondary">← Retour à l'Accueil</a></li>
 
+    {# ---------- FILTER BAR ---------- #}
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-body py-3">
+            <form method="get" action="{{ path('app_pharmacy_stock_index') }}" class="row g-2 align-items-end">
+
+                {# --- Row 1: search, category, supplier, status, expiration --- #}
+
+                {# Search #}
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold mb-1">
+                        <i class="fas fa-search me-1"></i> Recherche
+                    </label>
+                    <input type="text" name="search" class="form-control form-control-sm"
+                           placeholder="Désignation ou référence..."
+                           value="{{ filters.search }}">
+                </div>
+
+                {# Category #}
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold mb-1">Catégorie</label>
+                    <select name="category" class="form-select form-select-sm">
+                        <option value="">Toutes</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if filters.category == cat.id %}selected{% endif %}>
+                                {{ cat.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# Supplier #}
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold mb-1">Fournisseur</label>
+                    <select name="supplier" class="form-select form-select-sm">
+                        <option value="">Tous</option>
+                        {% for f in fournisseurs %}
+                            <option value="{{ f.id }}" {% if filters.supplier == f.id %}selected{% endif %}>
+                                {{ f.raisonSocial }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# Stock status #}
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold mb-1">État du stock</label>
+                    <select name="status" class="form-select form-select-sm">
+                        <option value="">Tous</option>
+                        <option value="ok"   {% if filters.status == 'ok' %}selected{% endif %}>✅ En stock</option>
+                        <option value="low"  {% if filters.status == 'low' %}selected{% endif %}>⚠️ Stock faible</option>
+                        <option value="out"  {% if filters.status == 'out' %}selected{% endif %}>❌ Rupture</option>
+                        <option value="over" {% if filters.status == 'over' %}selected{% endif %}>🔺 Surstock</option>
+                    </select>
+                </div>
+
+                {# Expiration #}
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold mb-1">Péremption</label>
+                    <select name="expiration" class="form-select form-select-sm">
+                        <option value="">Toutes</option>
+                        <option value="expired" {% if filters.expiration == 'expired' %}selected{% endif %}>⚠️ Périmés</option>
+                        <option value="soon"    {% if filters.expiration == 'soon' %}selected{% endif %}>⏳ Bientôt (30 j)</option>
+                        <option value="none"    {% if filters.expiration == 'none' %}selected{% endif %}>— Sans date</option>
+                    </select>
+                </div>
+
+                {# Buttons #}
+                <div class="col-md-1 d-flex gap-1">
+                    <button type="submit" class="btn btn-primary btn-sm flex-fill" title="Filtrer">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                    <a href="{{ path('app_pharmacy_stock_index') }}" class="btn btn-outline-secondary btn-sm flex-fill" title="Réinitialiser">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+
+                {# --- Row 2: quantity range --- #}
+                {# ← NEW: filter by quantity (e.g., 0 to find out-of-stock products) #}
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold mb-1">
+                        <i class="fas fa-cubes me-1"></i> Quantité (min – max)
+                    </label>
+                    <div class="input-group input-group-sm">
+                        <input type="number" name="qty_min" class="form-control"
+                               placeholder="Min (ex: 0)" min="0"
+                               value="{{ filters.qty_min }}">
+                        <span class="input-group-text">→</span>
+                        <input type="number" name="qty_max" class="form-control"
+                               placeholder="Max" min="0"
+                               value="{{ filters.qty_max }}">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    {# ---------- COUNTER ---------- #}
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="alert alert-info text-center py-2 mb-0 border-0">
+                <i class="fas fa-boxes-stacked me-2"></i>
+                <strong>{{ stocks|length }}</strong> produit(s) trouvé(s)
+                {# ← UPDATED: also check qty_min / qty_max to display "(filtré)" #}
+                {% if filters.search or filters.category or filters.supplier or filters.status or filters.expiration or filters.qty_min is not null or filters.qty_max is not null %}
+                    <span class="text-muted small ms-2">(filtré)</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
     <div class="table-responsive">
       <table class="table table-striped table-hover table-sm border-2 rounded-3 overflow-hidden shadow-sm">
         <thead class="table-light border-bottom-0">
@@ -79,7 +190,18 @@
                 <td>{{ stock.prixGros }}</td>
                 <td>{{ stock.prixDetail }}</td>
                 {#<td>{{ stock.tvaPourcentage }}</td>#}
-                <td>{{ stock.quantite }}</td>
+                {#<td>{{ stock.quantite }}</td> #}
+                <td>
+                    {% if stock.quantite == 0 %}
+                        <span class="badge bg-danger">0</span>
+                    {% elseif stock.quantiteMin is not null and stock.quantite <= stock.quantiteMin %}
+                        <span class="badge bg-warning text-dark">{{ stock.quantite }}</span>
+                    {% elseif stock.quantiteMax is not null and stock.quantite >= stock.quantiteMax %}
+                        <span class="badge bg-info text-dark">{{ stock.quantite }}</span>
+                    {% else %}
+                        <span class="badge bg-success">{{ stock.quantite }}</span>
+                    {% endif %}
+                </td>
                 <td>{{ stock.quantiteMin }}</td>
                 <td>{{ stock.quantiteMax }}</td>
                 <td>{{ stock.description }}</td>
@@ -88,7 +210,13 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="11">Aucun enregistrement</td>
+                {#<td colspan="11">Aucun enregistrement</td>#}
+            <tr>
+                <td colspan="13" class="text-center text-muted py-4">
+                    <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                    Aucun produit ne correspond à vos critères.
+                </td>
+            </tr>
             </tr>
         {% endfor %}
         </tbody>
